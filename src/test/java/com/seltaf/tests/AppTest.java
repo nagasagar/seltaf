@@ -1,4 +1,4 @@
-package com.nagasagar.seltaf;
+package com.seltaf.tests;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

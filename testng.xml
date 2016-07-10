@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="Suite1">
+    
+    <parameter name="appURL" value="http://www.seleniumtests.com/2015/12/test-registration-page.html"/>
+    <parameter name="browser" value="*chrome" />  <!--"*firefox, *chrome, *iexplore, *android"-->
+    <parameter name="runMode" value="LOCAL" />
+    
+	<test name="SeltafTest">
+		<classes>
+			<class name="com.seltaf.tests.SeltafTest" />
+		</classes>
+	</test>
+</suite>
