@@ -23,7 +23,7 @@ public class SeltafTestPlan {
         System.out.println("####################################################");
         System.out.println("end");
         System.out.println("####################################################");
-        DriverManager.cleanup();
+      //  DriverManager.cleanup();
     }
 
 

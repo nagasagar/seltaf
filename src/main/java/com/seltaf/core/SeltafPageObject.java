@@ -5,6 +5,6 @@ import org.openqa.selenium.WebDriver;
 import com.seltaf.driver.DriverManager;
 
 public class SeltafPageObject {
-	protected WebDriver driver =DriverManager.getWebdriver();
+	protected WebDriver driver = DriverManager.getWebDriver(true);
 
 }
