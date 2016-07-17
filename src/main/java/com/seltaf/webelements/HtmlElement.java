@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.seltaf.core.SeltafTestLogger;
 import com.seltaf.driver.DriverManager;
 import com.seltaf.helpers.WaitHelper;
+import com.seltaf.utils.ScreenshotUtility;
 import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
 
 public class HtmlElement {
@@ -381,6 +382,22 @@ public class HtmlElement {
                 script, element);
 
         return name;
+    }
+    
+    /**
+     * Captures snapshot of the current browser window.
+     */
+    public void captureSnapshot() {
+        captureSnapshot(com.seltaf.helpers.ContextHelper.getCallerMethod() + " on ");
+    }
+
+    /**
+     * Captures snapshot of the current browser window, and prefix the file name with the assigned string.
+     *
+     * @param  messagePrefix
+     */
+    protected void captureSnapshot(final String messagePrefix) {
+        ScreenshotUtility.captureSnapshot(messagePrefix);
     }
 
 }

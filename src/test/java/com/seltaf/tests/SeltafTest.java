@@ -9,7 +9,7 @@ import com.seltaf.pageobjects.MercureToursLoginPage;
 public class SeltafTest extends SeltafTestPlan {
 
 	@Test
-	public void test_Home_Page_Appear_Correct() {
+	public void test_Home_Page_Appear_Correct() throws Exception {
 
 		// Create Login Page object
 

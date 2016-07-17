@@ -12,6 +12,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.seltaf.core.SeltafContext;
+import com.seltaf.enums.TestType;
 import com.seltaf.utils.XMLUtility;
 
 
@@ -142,6 +143,10 @@ public class SeltafContextManager {
 
     public static void initThreadContext(final XmlTest xmlTest) {
         initThreadContext(globalContext.getTestNGContext(), xmlTest);
+    }
+
+	public static boolean isWebTest() {
+        return (getThreadContext().getTestType().equalsIgnoreCase(TestType.WEB.toString()));
     }
 
 }

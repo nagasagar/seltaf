@@ -8,10 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-
 import com.seltaf.enums.TestType;
 
 public class SeltafContext {
@@ -90,7 +88,7 @@ public class SeltafContext {
     private Map<String, Object> contextDataMap = Collections.synchronizedMap(new HashMap<String, Object>());
     private Map<ITestResult, List<Throwable>> verificationFailuresMap = new HashMap<ITestResult, List<Throwable>>();
     private LinkedList<TearDownService> tearDownServices = new LinkedList<TearDownService>();
-    
+    private LinkedList<ScreenShot> screenshots = new LinkedList<ScreenShot>();
     private ITestContext testNGContext = null;
     
     public SeltafContext(final ITestContext context) {
@@ -542,5 +540,40 @@ public class SeltafContext {
     public LinkedList<TearDownService> getTearDownServices() {
         return tearDownServices;
     }
+    
+    public LinkedList<ScreenShot> getScreenshots() {
+        return screenshots;
+    }
+
+    public void addScreenShot(final ScreenShot screenShot) {
+        deleteExceptionSnapshots();
+        screenshots.addLast(screenShot);
+    }
+
+    private void deleteExceptionSnapshots() {
+        try {
+            int size = screenshots.size();
+            if (size == 0) {
+                return;
+            }
+
+            ScreenShot screenShot = screenshots.get(size - 1);
+            if (screenShot.isException() && screenShot.getFullImagePath() != null) {
+                new File(screenShot.getFullImagePath()).delete();
+                screenshots.remove(size - 1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ScreenShot getExceptionScreenShot() {
+        if (screenshots.size() > 0 && screenshots.getLast().isException()) {
+            return screenshots.getLast();
+        } else {
+            return null;
+        }
+    }
+
 
 }

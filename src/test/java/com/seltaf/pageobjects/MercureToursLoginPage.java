@@ -22,11 +22,11 @@ public class MercureToursLoginPage extends SeltafPageObject {
 	WebElement SubmitButton;
 	
 	
-	public MercureToursLoginPage(){
+	public MercureToursLoginPage() throws Exception{
 		PageFactory.initElements(driver, this);
 	}
 	
-	public MercureToursLoginPage(boolean NavigateTo){
+	public MercureToursLoginPage(boolean NavigateTo) throws Exception{
 		super();
 		PageFactory.initElements(driver, this);
 		if(NavigateTo)
