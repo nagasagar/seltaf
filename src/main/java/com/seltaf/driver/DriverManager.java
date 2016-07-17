@@ -6,8 +6,7 @@ import java.util.Date;
 
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 /*
@@ -28,11 +27,14 @@ import com.seleniumtests.driver.DriverExceptionListener;
 import com.seleniumtests.driver.DriverMode;*/
 import com.seltaf.enums.BrowserType;
 import com.seltaf.enums.DriverMode;
+import com.seltaf.webdriverfactory.ChromeDriverFactory;
 import com.seltaf.webdriverfactory.FirefoxDriverFactory;
+import com.seltaf.webdriverfactory.IEDriverFactory;
 import com.seltaf.webdriverfactory.IWebDriverFactory;
 import com.seltaf.driver.CustomEventFiringWebDriver;
 import com.seltaf.core.SeltafContext;
 import com.seltaf.core.SeltafContextManager;
+import com.seltaf.customlisteners.DriverExceptionListener;
 import com.seltaf.driver.DriverConfig;
 
 
@@ -87,10 +89,8 @@ public class DriverManager
     
     public WebDriver createRemoteWebDriver(final String browser, final String mode) throws Exception {
         WebDriver driver = null;
-        webDriverBuilder = new FirefoxDriverFactory(this.config);
-        synchronized (this.getClass()) {
-            driver = webDriverBuilder.createWebDriver();
-        }
+        webDriverBuilder = new IEDriverFactory(this.config);
+        
 
  /*
         config.setBrowser(BrowserType.getBrowserType(browser));
@@ -282,7 +282,7 @@ public class DriverManager
                 listeners = "";
             }
 
-           // listeners = listeners + DriverExceptionListener.class.getName();
+            listeners = listeners + DriverExceptionListener.class.getName();
         }
 
         if (listeners != null && !listeners.equals("")) {
@@ -551,4 +551,26 @@ public class DriverManager
     public void setWebSessionTimeout(final int webSessionTimeout) {
         config.setWebSessionTimeout(webSessionTimeout);
     }
+    
+    public static void cleanUp() {
+        IWebDriverFactory iWebDriverFactory = getDriverManager().webDriverBuilder;
+        if (iWebDriverFactory != null) {
+            iWebDriverFactory.cleanUp();
+        } else {
+            WebDriver driver = driverSession.get();
+            if (driver != null) {
+                try {
+                    driver.quit();
+                } catch (WebDriverException ex) {
+                    ex.printStackTrace();
+                }
+
+                driver = null;
+            }
+        }
+
+        driverSession.remove();
+        driverManagerSession.remove();
+    }
+
 }

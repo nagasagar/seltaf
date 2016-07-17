@@ -2,6 +2,10 @@
 
 <suite name="Suite1">
     
+    <listeners>
+         <listener class-name="com.seltaf.customlisteners.TestRetryListener" />
+    </listeners>
+    
     <parameter name="appURL" value="http://www.seleniumtests.com/2015/12/test-registration-page.html"/>
     <parameter name="browser" value="*firefox" />  <!--"*firefox, *chrome, *iexplore, *android"-->
     <parameter name="runMode" value="LOCAL" />

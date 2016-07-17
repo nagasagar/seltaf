@@ -5,6 +5,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.seltaf.core.SeltafPageObject;
+import com.seltaf.helpers.WaitHelper;
 
 public class MercureToursLoginPage extends SeltafPageObject {
 
@@ -30,12 +31,15 @@ public class MercureToursLoginPage extends SeltafPageObject {
 		PageFactory.initElements(driver, this);
 		if(NavigateTo)
 		{
+			
 			driver.get("http://newtours.demoaut.com/");
 		}
 	}
 	
 	public String getPageTitle()
 	{
+		
+		
 		return driver.getTitle();
 		
 	}

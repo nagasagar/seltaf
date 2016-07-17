@@ -1,8 +1,10 @@
 package com.seltaf.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -86,6 +88,8 @@ public class SeltafContext {
     public static final String SAUCELABS_URL = "sauceLabsURL";
 
     private Map<String, Object> contextDataMap = Collections.synchronizedMap(new HashMap<String, Object>());
+    private Map<ITestResult, List<Throwable>> verificationFailuresMap = new HashMap<ITestResult, List<Throwable>>();
+    private LinkedList<TearDownService> tearDownServices = new LinkedList<TearDownService>();
     
     private ITestContext testNGContext = null;
     
@@ -223,6 +227,27 @@ public class SeltafContext {
         contextDataMap.put(name, value);
     }
     
+    public void addVerificationFailures(final ITestResult result, final List<Throwable> failures) {
+
+        this.verificationFailuresMap.put(result, failures);
+    }
+
+    public void addVerificationFailures(final ITestResult result, final Throwable failure) {
+
+        if (verificationFailuresMap.get(result) != null) {
+            this.verificationFailuresMap.get(result).add(failure);
+        } else {
+            ArrayList<Throwable> failures = new ArrayList<Throwable>();
+            failures.add(failure);
+            this.addVerificationFailures(result, failures);
+        }
+    }
+    
+    public List<Throwable> getVerificationFailures(final ITestResult result) {
+        List<Throwable> verificationFailures = verificationFailuresMap.get(result);
+        return verificationFailures == null ? new ArrayList<Throwable>() : verificationFailures;
+
+    }
     public String getAddJSErrorCollectorExtension() {
         return (String) getAttribute(ADD_JS_ERROR_COLLECTOR_EXTENSION);
     }
@@ -507,6 +532,15 @@ public class SeltafContext {
 
     public void setTestType(final String testType) {
         setAttribute(TEST_TYPE, testType);
+    }
+    
+    
+    public void addTearDownService(final TearDownService tearDown) {
+        tearDownServices.add(tearDown);
+    }
+    
+    public LinkedList<TearDownService> getTearDownServices() {
+        return tearDownServices;
     }
 
 }

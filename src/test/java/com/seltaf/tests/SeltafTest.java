@@ -18,6 +18,7 @@ public class SeltafTest extends SeltafTestPlan {
 		// Verify login page title
 
 		String loginPageTitle = Loginpage.getPageTitle();
+		
 		Assert.assertTrue(loginPageTitle.toLowerCase().contains("mercury"));
 	}
 }
