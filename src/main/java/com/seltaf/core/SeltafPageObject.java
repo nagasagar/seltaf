@@ -2,6 +2,7 @@ package com.seltaf.core;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -22,12 +23,15 @@ import com.seltaf.helpers.WaitHelper;
 import com.seltaf.utils.ScreenshotUtility;
 import com.seltaf.utils.WebUtility;
 import com.seltaf.webelements.HtmlElement;
+import com.seltaf.webelements.IPage;
 import com.seltaf.webelements.LinkElement;
 import com.seltaf.webelements.WebPageSection;
 import com.thoughtworks.selenium.Wait;
 import com.thoughtworks.selenium.Wait.WaitTimedOutException;
 
-public class SeltafPageObject extends BasePage {
+import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
+
+public class SeltafPageObject extends BasePage implements IPage {
 	
 	private static final Logger logger = Logger.getLogger(SeltafPageObject.class);
     private static final int MAX_WAIT_TIME_FOR_REDIRECTION = 3;
@@ -465,6 +469,28 @@ public class SeltafPageObject extends BasePage {
     public void assertCookiePresent(final String name) {
     	SeltafTestLogger.logWebStep(null, "assert cookie " + name + " is present.", false);
         assertHTML(getCookieByName(name) != null, "Cookie: {" + name + "} not found.");
+    }
+
+    /**
+     * Get JS Error by JSErrorCollector which only supports Firefox browser.
+     *
+     * @return  jsErrors in format "line number, errorLogger message, source name; "
+     */
+    public String getJSErrors() {
+        if (DriverManager.getDriverManager().isAddJSErrorCollectorExtension()) {
+            List<JavaScriptError> jsErrorList = JavaScriptError.readErrors(driver);
+            if (!jsErrorList.isEmpty()) {
+                String jsErrors = "";
+                for (JavaScriptError aJsErrorList : jsErrorList) {
+                    jsErrors += aJsErrorList.getLineNumber() + ", " + aJsErrorList.getErrorMessage() + ", "
+                            + aJsErrorList.getSourceName() + "; ";
+                }
+
+                return jsErrors;
+            }
+        }
+
+        return null;
     }
 
 }

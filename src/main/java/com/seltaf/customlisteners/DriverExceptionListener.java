@@ -20,6 +20,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import com.seltaf.core.SeltafContextManager;
+import com.seltaf.customexceptions.WebSessionEndedException;
+import com.seltaf.driver.DriverManager;
+import com.seltaf.enums.DriverMode;
+import com.seltaf.enums.TestType;
+import com.seltaf.utils.ScreenshotUtility;
 
 
 
@@ -53,7 +58,7 @@ public class DriverExceptionListener implements WebDriverEventListener {
     public void beforeScript(final String arg0, final WebDriver arg1) { }
 
     public void onException(final Throwable ex, final WebDriver arg1) {
-    	/*
+    	
         if (ex.getMessage() == null) {
             return;
         } else if (ex.getMessage().contains("Element must be user-editable in order to clear it")) {
@@ -80,8 +85,8 @@ public class DriverExceptionListener implements WebDriverEventListener {
         } else if (ex.getMessage().contains("Error communicating with the remote browser. It may have died.")) {
 
             // Session has lost connection, remove it then ignore quit() method.
-            if (WebUIDriver.getWebUIDriver().getConfig().getMode() == DriverMode.ExistingGrid) {
-                WebUIDriver.setWebDriver(null);
+            if (DriverManager.getDriverManager().getConfig().getMode() == DriverMode.ExistingGrid) {
+            	DriverManager.setWebDriver(null);
                 throw new WebSessionEndedException(ex);
             }
 
@@ -95,7 +100,7 @@ public class DriverExceptionListener implements WebDriverEventListener {
             System.out.println("Got customexception:" + message);
             if (message.matches("Session (/S*) was terminated due to(.|\\n)*")
                     || message.matches("cannot forward the request Connection to(.|\\n)*")) {
-                WebUIDriver.setWebDriver(null); // can't quit anymore, save time.
+                DriverManager.setWebDriver(null); // can't quit anymore, save time.
 
                 // since the session was
                 // terminated.
@@ -115,9 +120,9 @@ public class DriverExceptionListener implements WebDriverEventListener {
 
             try {
                 System.out.println("Got customexception" + ex.getMessage());
-                if (SeleniumTestsContextManager.getThreadContext().getTestType().equalsIgnoreCase(
+                if (SeltafContextManager.getThreadContext().getTestType().equalsIgnoreCase(
                             TestType.WEB.toString())) {
-                    new ScreenshotUtil(arg1).capturePageSnapshotOnException();
+                    new ScreenshotUtility(arg1).capturePageSnapshotOnException();
                 } else {
                     System.out.println("Capture screenshot is not available for appium");
                 }
@@ -126,7 +131,7 @@ public class DriverExceptionListener implements WebDriverEventListener {
                 // Ignore all exceptions
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
 	public void afterNavigateRefresh(WebDriver arg0) {
