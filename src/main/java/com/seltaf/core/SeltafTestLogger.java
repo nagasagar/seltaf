@@ -80,7 +80,7 @@ public class SeltafTestLogger {
             message = "<span style=\"font-weight:bold;color:#cc0052;\">" + message + "</span>";
         }
 
-        Reporter.log(escape(message), logToStandardOutput);
+        Reporter.log(message, logToStandardOutput);
     }
     
     public static String escape(final String message) {

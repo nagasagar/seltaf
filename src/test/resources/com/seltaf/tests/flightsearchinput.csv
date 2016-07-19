@@ -1,0 +1,6 @@
+TestEntity.TestCaseId,TestEntity.TestMethod,FlightSearchinput.triptype,FlightSearchinput.no_passengers,FlightSearchinput.departuredate,FlightSearchinput.returndate,FlightSearchinput.source,FlightSearchinput.dest,FlightSearchinput.airlinePreference,FlightSearchinput.serviceClass
+TestLinkTestCaseID1,flightBookingTest,oneway,1,05/24/2016,05/27/2016,Acapulco,London,No Preference,Business
+TestLinkTestCaseID2,flightBookingTest,return,2,05/25/2016,05/28/2016,Frankfurt,Seattle,Blue Skies Airlines,Coach
+TestLinkTestCaseID3,flightBookingTest,oneway,3,05/26/2016,05/29/2016,Acapulco,London,Unified Airlines,Business
+TestLinkTestCaseID4,flightBookingTest,return,3,05/27/2016,05/30/2016,Frankfurt,New York,Pangea Airlines,First
+,,,,,, ,,,

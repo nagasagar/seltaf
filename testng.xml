@@ -4,15 +4,16 @@
     
     <listeners>
          <listener class-name="com.seltaf.customlisteners.TestRetryListener" />
+         <listener class-name="com.seltaf.customlisteners.ExtentReporterNG" />
     </listeners>
     
-    <parameter name="appURL" value="http://www.seleniumtests.com/2015/12/test-registration-page.html"/>
-    <parameter name="browser" value="*firefox" />  <!--"*firefox, *chrome, *iexplore, *android"-->
+    <parameter name="appURL" value="http://newtours.demoaut.com/mercurywelcome.php"/>
+    <parameter name="browser" value="*chrome" />  <!--"*firefox, *chrome, *iexplore, *android"-->
     <parameter name="runMode" value="LOCAL" />
     <parameter name="useFirefoxDefaultProfile" value="false"/>
 	<test name="SeltafTest">
 		<classes>
-			<class name="com.seltaf.tests.SeltafTest" />
+			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
 		</classes>
 	</test>
 </suite>

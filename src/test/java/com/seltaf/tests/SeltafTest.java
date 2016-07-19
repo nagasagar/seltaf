@@ -4,7 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.seltaf.core.SeltafTestPlan;
-import com.seltaf.pageobjects.MercureToursLoginPage;
+import com.seltaf.pageobjects.MercureTourLoginPage;
 
 public class SeltafTest extends SeltafTestPlan {
 
@@ -13,7 +13,7 @@ public class SeltafTest extends SeltafTestPlan {
 
 		// Create Login Page object
 
-		MercureToursLoginPage Loginpage = new MercureToursLoginPage(true);
+		MercureTourLoginPage Loginpage = new MercureTourLoginPage(true);
 
 		// Verify login page title
 

@@ -89,7 +89,7 @@ public class DriverManager
     
     public WebDriver createRemoteWebDriver(final String browser, final String mode) throws Exception {
         WebDriver driver = null;
-        webDriverBuilder = new IEDriverFactory(this.config);
+        webDriverBuilder = new ChromeDriverFactory(this.config);
         
 
  /*
