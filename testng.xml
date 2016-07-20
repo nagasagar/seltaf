@@ -11,9 +11,11 @@
     <parameter name="browser" value="*chrome" />  <!--"*firefox, *chrome, *iexplore, *android"-->
     <parameter name="runMode" value="LOCAL" />
     <parameter name="useFirefoxDefaultProfile" value="false"/>
+    <parameter name="softAssertEnabled" value="true" />
 	<test name="SeltafTest">
 		<classes>
 			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
+			<!--<class name="com.seltaf.tests.SoftAssertionTest" />-->
 		</classes>
 	</test>
 </suite>

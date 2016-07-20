@@ -1,26 +1,45 @@
 package com.seltaf.customlisteners;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
- 
+import java.util.Set;
+
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
 import org.testng.IReporter;
 import org.testng.IResultMap;
 import org.testng.ISuite;
 import org.testng.ISuiteResult;
 import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.Reporter;
+import org.testng.internal.ResultMap;
+import org.testng.internal.TestResult;
+import org.testng.internal.Utils;
 import org.testng.xml.XmlSuite;
  
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import com.seltaf.core.SeltafTestLogger;
+import com.seltaf.core.TestRetryAnalyzer;
+import com.seltaf.core.ScreenShot;
+import com.seltaf.utils.ScreenshotUtility;
+import com.seltaf.driver.DriverManager;
+import com.seltaf.core.CustomAssertion;
  
-public class ExtentReporterNG implements IReporter {
+public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITestListener{
     private ExtentReports extent;
+    private Map<String, Boolean> isRetryHandleNeeded = new HashMap<String, Boolean>();
+    private Map<String, IResultMap> failedTests = new HashMap<String, IResultMap>();
+    private Map<String, IResultMap> skippedTests = new HashMap<String, IResultMap>();
  
     public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
         extent = new ExtentReports(outputDirectory + File.separator + "ExtentReportsTestNG.html", true);
@@ -54,18 +73,20 @@ public class ExtentReporterNG implements IReporter {
                 
                 for (String group : result.getMethod().getGroups())
                     test.assignCategory(group);
- 
-               
-                
+  
                 for(String message : Reporter.getOutput(result)) {
-                	test.log(LogStatus.INFO, message);
+                	if(message.contains("!!!FAILURE ALERT!!!"))
+                		test.log(LogStatus.FAIL, message);
+                	else
+                		test.log(LogStatus.INFO, message);
                   }
-                String message = "Test " + status.toString().toLowerCase() + "ed";
- 
-                if (result.getThrowable() != null)
-                    message = result.getThrowable().getMessage();
- 
-                test.log(status, message);
+                                
+                if (result.getThrowable() != null) {
+                    test.log(status, result.getThrowable());
+                }
+                else {
+                    test.log(status, "Test " + status.toString().toLowerCase() + "ed");
+                }
  
                 extent.endTest(test);
             }
@@ -77,4 +98,198 @@ public class ExtentReporterNG implements IReporter {
         calendar.setTimeInMillis(millis);
         return calendar.getTime();        
     }
+
+	public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void afterInvocation(IInvokedMethod method, ITestResult result) {
+		 Reporter.setCurrentTestResult(result);
+
+	        // Handle Soft CustomAssertion
+	        if (method.isTestMethod()) {
+	            List<Throwable> verificationFailures = CustomAssertion.getVerificationFailures();
+
+	            int size = verificationFailures.size();
+	            if (size == 0) {
+	                return;
+	            } else if (result.getStatus() == TestResult.FAILURE) {
+	                return;
+	            }
+
+	            result.setStatus(TestResult.FAILURE);
+
+	            if (size == 1) {
+	                result.setThrowable(verificationFailures.get(0));
+	            } else {
+
+	                // create failure message with all failures and stack traces barring last failure)
+	                StringBuilder failureMessage = new StringBuilder("!!! Many Test Failures (").append(size).append(
+	                        ")\n");
+	                for (int i = 0; i < size - 1; i++) {
+	                    failureMessage.append("Failure ").append(i + 1).append(" of ").append(size).append("\n");
+
+	                    Throwable t = verificationFailures.get(i);
+	                    String fullStackTrace = Utils.stackTrace(t, false)[1];
+	                    failureMessage.append(fullStackTrace).append("\n");
+	                }
+
+	                // final failure
+	                Throwable last = verificationFailures.get(size - 1);
+	                failureMessage.append("Failure ").append(size).append(" of ").append(size).append("\n");
+	                failureMessage.append(last.toString());
+
+	                // set merged throwable
+	                Throwable merged = new Throwable(failureMessage.toString());
+	                merged.setStackTrace(last.getStackTrace());
+
+	                result.setThrowable(merged);
+	            }
+	        }
+		
+	}
+
+	public void onTestStart(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onTestSuccess(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onTestFailure(ITestResult result) {
+		 if (result.getMethod().getRetryAnalyzer() != null) {
+	            TestRetryAnalyzer testRetryAnalyzer = (TestRetryAnalyzer) result.getMethod().getRetryAnalyzer();
+
+	            if (testRetryAnalyzer.getCount() <= testRetryAnalyzer.getMaxCount()) {
+	            	result.setStatus(ITestResult.SKIP);
+	                Reporter.setCurrentTestResult(null);
+	            } else {
+	                IResultMap rMap = failedTests.get(result.getTestContext().getName());
+	                rMap.addResult(result, result.getMethod());
+	                failedTests.put(result.getTestContext().getName(), rMap);
+	            }
+
+	            System.out.println(result.getMethod() + " Failed in " + testRetryAnalyzer.getCount() + " times");
+	            isRetryHandleNeeded.put(result.getTestContext().getName(), true);
+	        }
+
+	        // capture snap shot only for the failed web tests
+	        if (DriverManager.getWebDriver() != null) {
+	            ScreenShot screenShot = new ScreenshotUtility().captureWebPageSnapshot();
+	            SeltafTestLogger.logWebOutput(screenShot.getTitle(), SeltafTestLogger.buildScreenshotLog(screenShot), true);
+	        }
+		
+	}
+
+	public void onTestSkipped(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onStart(ITestContext context) {
+		 isRetryHandleNeeded.put(context.getName(), false);
+	        failedTests.put(context.getName(), new ResultMap());
+	        skippedTests.put(context.getName(), new ResultMap());
+		
+	}
+
+	public void onFinish(ITestContext context) {
+		 if (isRetryHandleNeeded.get(context.getName())) {
+	            removeIncorrectlySkippedTests(context, failedTests.get(context.getName()));
+	            removeFailedTestsInTestNG(context);
+	        } else {
+	            failedTests.put(context.getName(), context.getFailedTests());
+	            skippedTests.put(context.getName(), context.getSkippedTests());
+	        }
+		
+	}
+	
+	/**
+     * Remove retrying failed test cases from skipped test cases.
+     *
+     * @param   tc
+     * @param   map
+     *
+     * @return
+     */
+    private void removeIncorrectlySkippedTests(final ITestContext tc, final IResultMap map) {
+        List<ITestNGMethod> failsToRemove = new ArrayList<ITestNGMethod>();
+        IResultMap returnValue = tc.getSkippedTests();
+
+        for (ITestResult result : returnValue.getAllResults()) {
+            for (ITestResult resultToCheck : map.getAllResults()) {
+                if (resultToCheck.getMethod().equals(result.getMethod())) {
+                    failsToRemove.add(resultToCheck.getMethod());
+                    break;
+                }
+            }
+
+            for (ITestResult resultToCheck : tc.getPassedTests().getAllResults()) {
+                if (resultToCheck.getMethod().equals(result.getMethod())) {
+                    failsToRemove.add(resultToCheck.getMethod());
+                    break;
+                }
+            }
+        }
+
+        for (ITestNGMethod method : failsToRemove) {
+            returnValue.removeResult(method);
+        }
+
+        skippedTests.put(tc.getName(), tc.getSkippedTests());
+
+    }
+    
+    /**
+     * Remote failed test cases in TestNG.
+     *
+     * @param   tc
+     *
+     * @return
+     */
+    private void removeFailedTestsInTestNG(final ITestContext tc) {
+        IResultMap returnValue = tc.getFailedTests();
+
+        ResultMap removeMap = new ResultMap();
+        for (ITestResult result : returnValue.getAllResults()) {
+            boolean isFailed = false;
+            for (ITestResult resultToCheck : failedTests.get(tc.getName()).getAllResults()) {
+                if (result.getMethod().equals(resultToCheck.getMethod())
+                        && result.getEndMillis() == resultToCheck.getEndMillis()) {
+                    isFailed = true;
+                    break;
+                }
+            }
+
+            if (!isFailed) {
+                System.out.println("Removed failed cases:" + result.getMethod().getMethodName());
+                removeMap.addResult(result, result.getMethod());
+            }
+        }
+
+        for (ITestResult result : removeMap.getAllResults()) {
+            ITestResult removeResult = null;
+            for (ITestResult resultToCheck : returnValue.getAllResults()) {
+                if (result.getMethod().equals(resultToCheck.getMethod())
+                        && result.getEndMillis() == resultToCheck.getEndMillis()) {
+                    removeResult = resultToCheck;
+                    break;
+                }
+            }
+
+            if (removeResult != null) {
+                returnValue.getAllResults().remove(removeResult);
+            }
+        }
+    }
+
 }

@@ -31,6 +31,8 @@ import org.testng.internal.annotations.IAnnotationFinder;
 
 import org.testng.xml.XmlSuite;
 
+import com.google.inject.Injector;
+
 public class DefaultSuite implements ISuite {
 
     private static final long serialVersionUID = -152933123712833411L;
@@ -121,5 +123,25 @@ public class DefaultSuite implements ISuite {
     public List<ITestNGMethod> getAllMethods() {
         return null;
     }
+
+	public Injector getParentInjector() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getParentModule() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setParentInjector(Injector arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getGuiceStage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
