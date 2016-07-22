@@ -25,4 +25,17 @@ public class Passenger {
 		MealPreference = mealPreference;
 	}
 	
+
+
+@Override
+public String toString() {
+	
+        return ("Passenger: ["+
+ " First Name: " + FirstName +","+
+ "Last Name:"+LastName+","+
+ "Meal Preference :"+MealPreference+","+
+ " ]");
+        
+ }
+
 }

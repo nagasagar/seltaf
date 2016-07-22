@@ -3,7 +3,7 @@
 <suite name="Suite1">
     
     <listeners>
-         <listener class-name="com.seltaf.customlisteners.TestRetryListener" />
+         <!--<listener class-name="com.seltaf.customlisteners.TestRetryListener" />-->
          <listener class-name="com.seltaf.customlisteners.ExtentReporterNG" />
     </listeners>
     
@@ -15,7 +15,7 @@
 	<test name="SeltafTest">
 		<classes>
 			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
-			<!--<class name="com.seltaf.tests.SoftAssertionTest" />-->
+			<class name="com.seltaf.tests.SoftAssertionTest" />
 		</classes>
 	</test>
 </suite>

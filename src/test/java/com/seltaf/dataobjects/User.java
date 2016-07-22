@@ -55,7 +55,8 @@ public class User {
         this.password = password;
     }
 
-    @Override public String toString() {
+    @Override 
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
         return stringBuilder.append("User [firstName = " + firstName + ", ")

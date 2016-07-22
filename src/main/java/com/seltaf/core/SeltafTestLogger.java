@@ -109,12 +109,12 @@ public class SeltafTestLogger {
 
         if (screenShot.getHtmlSourcePath() != null) {
             sbMessage.append(" | <a href='" + screenShot.getHtmlSourcePath()
-                    + "' target=html>Application HTML Source</a>");
+                    + "' target='_blank'>Application HTML Source</a>");
         }
 
         if (screenShot.getImagePath() != null) {
             sbMessage.append(" | <a href='" + screenShot.getImagePath()
-                    + "' class='lightbox'>Application Snapshot</a>");
+                    + "'data-featherlight='image'>Application Snapshot</a>");
         }
 
         return sbMessage.toString();

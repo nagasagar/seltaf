@@ -44,4 +44,18 @@ public class CreditCard {
 	public void setLastName(String lastName) {
 		LastName = lastName;
 	}
+	
+	@Override
+	public String toString() {
+		
+	        return ("CreditCard: ["+
+	 " cardtype: " + cardtype +","+
+	 "cardnumber:"+cardnumber+","+
+	 "cardexpiry :"+cardexpiry+","+
+	 "FirstName:"+FirstName+","+
+	 "MiddleName:"+MiddleName+","+
+	 "LastName:"+LastName+","+ 
+	 " ]");
+	        
+	 }
 }

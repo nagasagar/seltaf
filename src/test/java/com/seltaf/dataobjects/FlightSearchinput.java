@@ -1,6 +1,7 @@
 package com.seltaf.dataobjects;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class FlightSearchinput {
@@ -61,6 +62,21 @@ public class FlightSearchinput {
 		this.airlinePreference = airlinePreference;
 	}
 	
+	@Override
+	public String toString() {
+		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+	        return ("FlightSearchinput: ["+
+	 " triptype: " + triptype +","+
+	 "no. passengers:"+no_passengers+","+
+	 "From :"+source+","+
+	 "To:"+dest+","+
+	 "departure date:"+format1.format(departuredate.getTime())+","+
+	 "return date:"+format1.format(returndate.getTime())+","+ 
+	 "servicec lass:"+serviceClass+","+
+	 "Airline preference:"+airlinePreference+","+
+	 " ]");
+	        
+	 }
 	
 
 }

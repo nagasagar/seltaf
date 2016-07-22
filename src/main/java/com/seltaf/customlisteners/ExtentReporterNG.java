@@ -24,13 +24,14 @@ import org.testng.internal.ResultMap;
 import org.testng.internal.TestResult;
 import org.testng.internal.Utils;
 import org.testng.xml.XmlSuite;
- 
+
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.seltaf.core.SeltafTestLogger;
 import com.seltaf.core.TestRetryAnalyzer;
 import com.seltaf.core.ScreenShot;
+import com.seltaf.util.internal.entity.TestEntity;
 import com.seltaf.utils.ScreenshotUtility;
 import com.seltaf.driver.DriverManager;
 import com.seltaf.core.CustomAssertion;
@@ -55,6 +56,16 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
                 buildTestNodes(context.getSkippedTests(), LogStatus.SKIP);
             }
         }
+        
+        Map<String, String> sysInfo = new HashMap<String, String>();
+        sysInfo.put("Selenium Version", "2.53.1");
+        sysInfo.put("Appium version", "2.10");
+        sysInfo.put("TestNG version", "6.8");
+
+        extent.addSystemInfo(sysInfo);
+        for (String s : Reporter.getOutput()) { 
+            extent.setTestRunnerOutput(s); 
+        }
  
         extent.flush();
         extent.close();
@@ -65,12 +76,42 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
  
         if (tests.size() > 0) {
             for (ITestResult result : tests.getAllResults()) {
-                test = extent.startTest(result.getMethod().getMethodName());
- 
+            	String TestcaseId = "";
+            	Object[] testparameters = result.getParameters();
+    			for(Object testparameter: testparameters)
+    			{
+    				if(testparameter.getClass().getSimpleName().equalsIgnoreCase("TestEntity"))
+    				{
+    					TestEntity x = (TestEntity) testparameter;
+    					TestcaseId = x.getTestCaseId();
+    				}
+    			}
+    			if(TestcaseId.equals(""))
+    				test = extent.startTest(result.getMethod().getMethodName());
+    			else
+    				test = extent.startTest(result.getMethod().getMethodName()+"  ("+TestcaseId+")");
                 test.getTest().setStartedTime(getTime(result.getStartMillis()));
                 test.getTest().setEndedTime(getTime(result.getEndMillis()));
+                StringBuffer description = new StringBuffer("");
+               if(result.getParameters().length>0){
+            	   description.append("<ul>");
+            	   description.append("<li>"+result.getMethod().getDescription()+"</li>");
+            	   description.append("Parameters:");
+            	   description.append("\n");
+                     		for(Object parameters : result.getParameters())
+                     		{
+                     			description.append("<li>"+parameters+"</li>");
+                     			//description.append("\n");
+                     		}
+                   description.append("</ul>");
+                }
+                else
+                {
+                	description.append(result.getMethod().getDescription());
+                }
                 
-                
+                test.setDescription(description.toString());
+               
                 for (String group : result.getMethod().getGroups())
                     test.assignCategory(group);
   
@@ -100,7 +141,18 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
     }
 
 	public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-		// TODO Auto-generated method stub
+		if (method.isTestMethod()) {
+			String TestcaseId = "";
+			Object[] parameters = testResult.getParameters();
+			for(Object parameter: parameters)
+			{
+				if(parameter.getClass().getSimpleName().equalsIgnoreCase("TestEntity"))
+				{
+					TestEntity x = (TestEntity) parameter;
+					TestcaseId = x.getTestCaseId();
+				}
+			}
+		}
 		
 	}
 

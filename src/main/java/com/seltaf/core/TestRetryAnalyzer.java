@@ -20,7 +20,7 @@ public class TestRetryAnalyzer implements IRetryAnalyzer {
 
     private static final String TEST_RETRY_COUNT = "testRetryCount";
     private int count = 1;
-    private int maxCount = 2;
+    private int maxCount = 1;
 
     public TestRetryAnalyzer() {
         String retryMaxCount = System.getProperty(TEST_RETRY_COUNT);

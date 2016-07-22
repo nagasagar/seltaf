@@ -47,7 +47,7 @@ public class MercuryToursFlightBookingTest extends SeltafTestPlan{
 	    @Test(
 	            groups = { "MercureTours" },
 	            dataProvider = "FlightBookingData",
-	            description = "Register with valid login data"
+	            description = "Booking of flight tickets"
 	        )
 	        public void flightBookingTest(final TestEntity testEntity,
 	            final FlightSearchinput input, final Passenger passenger, final CreditCard creditcard) throws Exception {
