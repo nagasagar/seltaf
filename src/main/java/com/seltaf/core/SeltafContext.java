@@ -12,6 +12,7 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import com.seltaf.enums.TestType;
 
+
 public class SeltafContext {
 	public static final String TEST_CONFIGURATION = "testConfig";
     public static final String APP_URL = "appURL";
@@ -87,6 +88,7 @@ public class SeltafContext {
 
     private Map<String, Object> contextDataMap = Collections.synchronizedMap(new HashMap<String, Object>());
     private Map<ITestResult, List<Throwable>> verificationFailuresMap = new HashMap<ITestResult, List<Throwable>>();
+    private Map<ITestResult, List<Throwable>> cucumberverificationFailuresMap = new HashMap<ITestResult, List<Throwable>>();
     private LinkedList<TearDownService> tearDownServices = new LinkedList<TearDownService>();
     private LinkedList<ScreenShot> screenshots = new LinkedList<ScreenShot>();
     private ITestContext testNGContext = null;
@@ -229,6 +231,15 @@ public class SeltafContext {
 
         this.verificationFailuresMap.put(result, failures);
     }
+    public void addcucumberVerificationFailures(final ITestResult result, final List<Throwable> failures) {
+
+        this.cucumberverificationFailuresMap.put(result, failures);
+    }
+    public void clearcucumberVerificationFailures() {
+    	
+            this.cucumberverificationFailuresMap = new HashMap<ITestResult, List<Throwable>>();
+        
+    }
 
     public void addVerificationFailures(final ITestResult result, final Throwable failure) {
 
@@ -240,9 +251,24 @@ public class SeltafContext {
             this.addVerificationFailures(result, failures);
         }
     }
+    public void addcucumberVerificationFailures(final ITestResult result, final Throwable failure) {
+
+        if (cucumberverificationFailuresMap.get(result) != null) {
+            this.cucumberverificationFailuresMap.get(result).add(failure);
+        } else {
+            ArrayList<Throwable> failures = new ArrayList<Throwable>();
+            failures.add(failure);
+            this.addcucumberVerificationFailures(result, failures);
+        }
+    }
     
     public List<Throwable> getVerificationFailures(final ITestResult result) {
         List<Throwable> verificationFailures = verificationFailuresMap.get(result);
+        return verificationFailures == null ? new ArrayList<Throwable>() : verificationFailures;
+
+    }
+    public List<Throwable> getcucumberVerificationFailures(final ITestResult result) {
+        List<Throwable> verificationFailures = cucumberverificationFailuresMap.get(result);
         return verificationFailures == null ? new ArrayList<Throwable>() : verificationFailures;
 
     }

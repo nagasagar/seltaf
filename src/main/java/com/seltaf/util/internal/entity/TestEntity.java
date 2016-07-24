@@ -15,6 +15,7 @@ package com.seltaf.util.internal.entity;
 
 public class TestEntity {
     public static final String TEST_METHOD = "TestEntity.TestMethod";
+    public static final String TEST_CASE_ID = "TestEntity.TestCaseId";
     public static final String TEST_DP_TAGS = "TestEntity.TestTags";
 
     private String testCaseId = "";

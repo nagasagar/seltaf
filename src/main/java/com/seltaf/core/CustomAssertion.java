@@ -384,8 +384,13 @@ public class CustomAssertion {
         return SeltafContextManager.getThreadContext().getVerificationFailures(Reporter.getCurrentTestResult());
     }
     
+    public static List<Throwable> getcucumberVerificationFailures() {
+        return SeltafContextManager.getThreadContext().getcucumberVerificationFailures(Reporter.getCurrentTestResult());
+    }
+    
     private static void addVerificationFailure(final Throwable e) {
     	SeltafContextManager.getThreadContext().addVerificationFailures(Reporter.getCurrentTestResult(), e);
+    	SeltafContextManager.getThreadContext().addcucumberVerificationFailures(Reporter.getCurrentTestResult(), e);
         SeltafTestLogger.log("!!!FAILURE ALERT!!! - Assertion Failure: " + e.getMessage(), true, true);
     }
     

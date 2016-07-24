@@ -38,7 +38,7 @@ public class MercuryToursFlightBookingTest extends SeltafTestPlan{
 	        classMap.put("FlightSearchinput", FlightSearchinput.class);
 	        classMap.put("Passenger", Passenger.class);
 	        classMap.put("CreditCard", CreditCard.class);
-
+	        
 	        return SpreadSheetHelper.getEntitiesFromSpreadsheet(
 	        		MercuryToursFlightBookingTest.class, classMap, "flightsearchinput.csv", filter);
 	    }

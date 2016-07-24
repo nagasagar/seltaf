@@ -14,8 +14,9 @@
     <parameter name="softAssertEnabled" value="true" />
 	<test name="SeltafTest">
 		<classes>
-			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
+			<!----><class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
 			<class name="com.seltaf.tests.SoftAssertionTest" />
+			<class name="com.seltaf.tests.RunCukesTest" />
 		</classes>
 	</test>
 </suite>

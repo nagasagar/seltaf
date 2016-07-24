@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.xml.XmlTest;
 import com.seltaf.driver.DriverManager;
 
+
 public class SeltafTestPlan {
 	
 	 private static final Logger logger = SeltafTestLogger.getLogger(SeltafTestPlan.class);
