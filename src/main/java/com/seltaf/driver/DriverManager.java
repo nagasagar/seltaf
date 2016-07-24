@@ -27,6 +27,7 @@ import com.seleniumtests.driver.DriverExceptionListener;
 import com.seleniumtests.driver.DriverMode;*/
 import com.seltaf.enums.BrowserType;
 import com.seltaf.enums.DriverMode;
+import com.seltaf.webdriverfactory.AndroidDriverFactory;
 import com.seltaf.webdriverfactory.ChromeDriverFactory;
 import com.seltaf.webdriverfactory.FirefoxDriverFactory;
 import com.seltaf.webdriverfactory.IEDriverFactory;
@@ -88,9 +89,9 @@ public class DriverManager
     }
     
     public WebDriver createRemoteWebDriver(final String browser, final String mode) throws Exception {
-        WebDriver driver = null;
-        webDriverBuilder = new ChromeDriverFactory(this.config);
-        
+        //WebDriver driver = null;
+        //webDriverBuilder = new ChromeDriverFactory(this.config);
+    	webDriverBuilder = new AndroidDriverFactory(this.config);
 
  /*
         config.setBrowser(BrowserType.getBrowserType(browser));

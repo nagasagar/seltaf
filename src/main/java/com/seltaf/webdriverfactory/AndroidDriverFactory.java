@@ -60,7 +60,7 @@ public class AndroidDriverFactory extends AbstractWebDriverFactory implements IW
     protected void setPageLoadTimeout(final long timeout) {
         try {
             driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
-        } catch (UnsupportedCommandException e) {
+        } catch (Exception e) {
             // chromedriver does not support pageLoadTimeout
         }
     }

@@ -12,6 +12,7 @@ import com.seltaf.core.SeltafTestLogger;
 import com.seltaf.customexceptions.WebSessionEndedException;
 import com.seltaf.driver.DriverManager;
 import com.seltaf.enums.BrowserType;
+import com.seltaf.enums.TestType;
 import com.seltaf.helpers.HashCodeGenerator;
 
 
@@ -85,24 +86,31 @@ public class ScreenshotUtility {
 
         try {
             String url = null;
-            try {
-                url = driver.getCurrentUrl();
-            } catch (org.openqa.selenium.UnhandledAlertException ex) {
+            if (SeltafContextManager.getThreadContext().getTestType().equalsIgnoreCase(
+                    TestType.WEB.toString()))
+            {
+            	 try {
+                     url = driver.getCurrentUrl();
+                 } catch (org.openqa.selenium.UnhandledAlertException ex) {
 
-                // ignore alert customexception
-                ex.printStackTrace();
-                url = driver.getCurrentUrl();
+                     // ignore alert customexception
+                     ex.printStackTrace();
+                     url = driver.getCurrentUrl();
+                 }
+            	 String title = driver.getTitle();
+                 String pageSource = driver.getPageSource();
+                 handleTitle(title, screenShot);
+                 handleSource(pageSource, screenShot);
+
             }
+           
 
-            String title = driver.getTitle();
-            String pageSource = driver.getPageSource();
-
+            
             String filename = HashCodeGenerator.getRandomHashCode("web");
             this.filename = filename;
             screenShot.setLocation(url);
 
-            handleTitle(title, screenShot);
-            handleSource(pageSource, screenShot);
+            
             if (SeltafContextManager.getThreadContext().getCaptureSnapshot()) {
                 handleImage(screenShot);
             }
@@ -179,9 +187,9 @@ public class ScreenshotUtility {
                 return null;
             }
 
-            if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType())) {
-                return null;
-            }
+            //  if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType())) {
+            //    return null;
+            //}
 
             TakesScreenshot screenShot = (TakesScreenshot) driver;
             return screenShot.getScreenshotAs(OutputType.BASE64);

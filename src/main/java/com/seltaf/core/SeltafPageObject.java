@@ -19,6 +19,7 @@ import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.seltaf.customexceptions.NotCurrentPageException;
 import com.seltaf.customexceptions.SeltafException;
 import com.seltaf.driver.DriverManager;
+import com.seltaf.enums.TestType;
 import com.seltaf.helpers.WaitHelper;
 import com.seltaf.utils.ScreenshotUtility;
 import com.seltaf.utils.WebUtility;
@@ -104,9 +105,12 @@ public class SeltafPageObject extends BasePage implements IPage {
         }
 
         assertCurrentPage(false);
-
+        
+               
         try {
-            this.windowHandle = driver.getWindowHandle();
+        	if (SeltafContextManager.getThreadContext().getTestType().equalsIgnoreCase(
+                    TestType.WEB.toString()))
+        		this.windowHandle = driver.getWindowHandle();
         } catch (Exception ex) {
             // Ignore for OperaDriver
         }
