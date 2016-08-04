@@ -1,10 +1,16 @@
 package com.seltaf.utils;
 
+import io.appium.java_client.AppiumDriver;
+
 import java.io.IOException;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+
 import com.seltaf.core.ScreenShot;
 import com.seltaf.core.SeltafContext;
 import com.seltaf.core.SeltafContextManager;
@@ -14,6 +20,7 @@ import com.seltaf.driver.DriverManager;
 import com.seltaf.enums.BrowserType;
 import com.seltaf.enums.TestType;
 import com.seltaf.helpers.HashCodeGenerator;
+import com.seltaf.helpers.WaitHelper;
 
 
 
@@ -146,19 +153,22 @@ public class ScreenshotUtility {
     }
 
     private void handleImage(final ScreenShot screenShot) {
+    	
         try {
             String screenshotString = captureEntirePageScreenshotToString(DriverManager.getWebDriver(), "");
 
             if (screenshotString != null && !screenshotString.equalsIgnoreCase("")) {
+            	
                 byte[] byteArray = screenshotString.getBytes();
                 FileUtility.writeImage(outputDirectory + "/screenshots/" + filename + ".png", byteArray);
                 screenShot.setImagePath(suiteName + "/screenshots/" + filename + ".png");
-
+                
             }
         } catch (Throwable e) {
             logger.warn("Ex", e);
             e.printStackTrace();
         }
+       
     }
 
     private void handleTitle(String title, final ScreenShot screenShot) {
@@ -187,9 +197,14 @@ public class ScreenshotUtility {
                 return null;
             }
 
-            //  if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType())) {
-            //    return null;
-            //}
+            if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType())) {
+            	String current_context = ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).getContext();
+            	switchContext(driver,"NATIVE");
+            	TakesScreenshot screenShot = (TakesScreenshot) driver;
+            	String screenshotstring = screenShot.getScreenshotAs(OutputType.BASE64);
+                switchContext(driver,current_context);
+                return screenshotstring;
+            }
 
             TakesScreenshot screenShot = (TakesScreenshot) driver;
             return screenShot.getScreenshotAs(OutputType.BASE64);
@@ -237,4 +252,18 @@ public class ScreenshotUtility {
         }
     }
 
+    public static void switchContext(final WebDriver driver,final String context) throws Exception {
+			 Set<String> contextNames = ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).getContextHandles();
+		 int webviewindex=0;
+		 for (String contextName : contextNames) {
+		   //  System.out.println(contextName); //prints out something like NATIVE_APP \n WEBVIEW_1
+		     if(contextName.contains(context))
+		     {
+		    	 break;
+		     }
+		     webviewindex++;
+		 }
+		 System.out.println("Switching context to : "+(String) contextNames.toArray()[webviewindex]);
+		 ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).context((String) contextNames.toArray()[webviewindex]);
+   }
 }

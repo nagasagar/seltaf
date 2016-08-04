@@ -1,8 +1,11 @@
 package com.seltaf.core;
 
+import io.appium.java_client.AppiumDriver;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -13,12 +16,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.UnreachableBrowserException;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.seltaf.customexceptions.NotCurrentPageException;
 import com.seltaf.customexceptions.SeltafException;
 import com.seltaf.driver.DriverManager;
+import com.seltaf.enums.BrowserType;
 import com.seltaf.enums.TestType;
 import com.seltaf.helpers.WaitHelper;
 import com.seltaf.utils.ScreenshotUtility;
@@ -51,7 +57,7 @@ public class SeltafPageObject extends BasePage implements IPage {
     private String imageFilePath = null;
     
     
-	protected WebDriver driver = DriverManager.getWebDriver(true);
+	
 	
 	
 	/**
@@ -84,7 +90,7 @@ public class SeltafPageObject extends BasePage implements IPage {
     public SeltafPageObject(final HtmlElement pageIdentifierElement, final String url) throws Exception {
         Calendar start = Calendar.getInstance();
         start.setTime(new Date());
-
+        long startTime = start.getTimeInMillis();
         if (SeltafContextManager.getGlobalContext() != null
                 && SeltafContextManager.getGlobalContext().getTestNGContext() != null) {
             suiteName = SeltafContextManager.getGlobalContext().getTestNGContext().getSuite().getName();
@@ -98,11 +104,13 @@ public class SeltafPageObject extends BasePage implements IPage {
             open(url);
         }
 
+        
         // Wait for page load is applicable only for web test
         // When running tests on an iframe embedded site then test will fail if this command is not used
         if (SeltafContextManager.isWebTest()) {
             waitForPageToLoad();
         }
+        
 
         assertCurrentPage(false);
         
@@ -117,17 +125,73 @@ public class SeltafPageObject extends BasePage implements IPage {
 
 
         Calendar end = Calendar.getInstance();
-        start.setTime(new Date());
+        end.setTime(new Date());
 
-        long startTime = start.getTimeInMillis();
+        
         long endTime = end.getTimeInMillis();
         if ((endTime - startTime) / 1000 > 0) {
-            SeltafTestLogger.log("Open web page in :" + (endTime - startTime) / 1000 + "seconds");
+            SeltafTestLogger.log("Page Opened in :" + (endTime - startTime) / 1000 + "seconds");
         }
+        if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType())||
+            	DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.IPad.getBrowserType())||
+            	DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.IPhone.getBrowserType()))
+            {
+            	captureAPPSnapshot();
+            }
+    }
+    
+    public SeltafPageObject(final HtmlElement pageIdentifierElement, boolean switch2Hybrid) throws Exception {
+        Calendar start = Calendar.getInstance();
+        start.setTime(new Date());
+        long startTime = start.getTimeInMillis();
+        if (SeltafContextManager.getGlobalContext() != null
+                && SeltafContextManager.getGlobalContext().getTestNGContext() != null) {
+            suiteName = SeltafContextManager.getGlobalContext().getTestNGContext().getSuite().getName();
+            outputDirectory = SeltafContextManager.getGlobalContext().getTestNGContext().getOutputDirectory();
+        }
+
+        this.pageIdentifierElement = pageIdentifierElement;
+        driver = DriverManager.getWebDriver(true);
+
+        if (url != null) {
+            open(url);
+        }
+
+        if(switch2Hybrid)
+		 {
+			 switchtoHybridContext();
+			 captureAPPSnapshot();
+		 }
+		 
+        
+       assertCurrentPage(false);
+        
+               
+        try {
+        	if (SeltafContextManager.getThreadContext().getTestType().equalsIgnoreCase(
+                    TestType.WEB.toString()))
+        		this.windowHandle = driver.getWindowHandle();
+        } catch (Exception ex) {
+            // Ignore for OperaDriver
+        }
+
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(new Date());
+
+        
+        long endTime = end.getTimeInMillis();
+        if ((endTime - startTime) / 1000 > 0) {
+            SeltafTestLogger.log("Page Opened in :" + (endTime - startTime) / 1000 + "seconds");
+        }
+        
     }
 
 	@Override
 	protected void assertCurrentPage(boolean log) throws NotCurrentPageException {
+		if(pageIdentifierElement!=null)
+			waitForElementPresent(pageIdentifierElement);
+		
 		if (pageIdentifierElement == null) { }
         else if (this.isElementPresent(pageIdentifierElement.getBy())) { }
         else {
@@ -258,6 +322,22 @@ public class SeltafPageObject extends BasePage implements IPage {
 	        }
 
 	        SeltafTestLogger.logWebOutput(url, title + " (" + SeltafTestLogger.buildScreenshotLog(screenShot) + ")", false);
+
+	    }
+	 public void captureAPPSnapshot() {
+	        ScreenShot screenShot = new ScreenshotUtility(driver).captureWebPageSnapshot();
+	        this.title = screenShot.getTitle();
+
+	        if (screenShot.getHtmlSourcePath() != null) {
+	            htmlFilePath = screenShot.getHtmlSourcePath().replace(suiteName, outputDirectory);
+	            htmlSavedToPath = screenShot.getHtmlSourcePath();
+	        }
+
+	        if (screenShot.getImagePath() != null) {
+	            imageFilePath = screenShot.getImagePath().replace(suiteName, outputDirectory);
+	        }
+
+	        SeltafTestLogger.logWebStep(url, "Screen Loaded (" + SeltafTestLogger.buildScreenshotLog(screenShot) + ")", false);
 
 	    }
 	
@@ -420,6 +500,40 @@ public class SeltafPageObject extends BasePage implements IPage {
             driver.switchTo().defaultContent();
         } catch (UnhandledAlertException e) { }
     }
+   
+   /**
+    * switches to web coontest in an hybrid app
+    */
+   public void switchtoHybridContext() throws Exception {
+		WaitHelper.waitForSeconds(5);
+		 Set<String> contextNames = ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).getContextHandles();
+		 int webviewindex=0;
+		 for (String contextName : contextNames) {
+		   //  System.out.println(contextName); //prints out something like NATIVE_APP \n WEBVIEW_1
+		     if(contextName.contains("WEBVIEW"))
+		     {
+		    	 break;
+		     }
+		     webviewindex++;
+		 }
+		 System.out.println("Switching context to : "+(String) contextNames.toArray()[webviewindex]);
+		 ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).context((String) contextNames.toArray()[webviewindex]);
+   }
+   
+   public void switchtoNaticeContext() throws Exception {
+		WaitHelper.waitForSeconds(5);
+		 Set<String> contextNames = ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).getContextHandles();
+		 int webviewindex=0;
+		 for (String contextName : contextNames) {
+		    // System.out.println(contextName); //prints out something like NATIVE_APP \n WEBVIEW_1
+		     if(contextName.contains("NATIVE_APP"))
+		     {
+		    	 break; 
+		     }
+		 }
+		 System.out.println("Switching context to : "+(String) contextNames.toArray()[webviewindex]);
+		 ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).context((String) contextNames.toArray()[webviewindex]);
+  }
    
    public WebElement getElement(final By by, final String elementName) {
        WebElement element = null;

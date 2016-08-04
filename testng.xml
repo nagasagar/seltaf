@@ -8,18 +8,20 @@
     </listeners>
     
     <parameter name="appURL" value="http://newtours.demoaut.com/mercurywelcome.php"/>
-    <parameter name="browser" value="android" />  <!--"*firefox, *chrome, *iexplore, *android"-->
+    <parameter name="browser" value="chrome" />  <!--"*firefox, *chrome, *iexplore, *android"-->
     <parameter name="runMode" value="LOCAL" />
     <parameter name="useFirefoxDefaultProfile" value="false"/>
     <parameter name="softAssertEnabled" value="true" />
-	<!--<test name="SeltafTest">
+    <parameter name="dpTagsInclude" value="x"/>
+	<!-- <test name="SeltafTest">
 		<classes>
 			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
 			<class name="com.seltaf.tests.SoftAssertionTest" />
 			<class name="com.seltaf.tests.RunCukesTest" />
 		</classes>
-	</test>-->
+	</test>
 	<test name="AdnroidAppTest">
+		<parameter name="browser" value="android" />
 	    <parameter name="testType" value="app" />
         <parameter name="appiumServerURL" value="http://localhost:4723/wd/hub"/>
         <parameter name="automationName" value="Appium"/>
@@ -27,15 +29,29 @@
         <parameter name="mobilePlatformVersion" value="5.1"/>
         <parameter name="deviceName" value="BX903HYQWF"/>
         <parameter name="appPackage" value="com.android.calculator2"/>
-        <!--Activity name for Android activity to be launched from package-->
         <parameter name="appActivity" value="com.android.calculator2.Calculator"/>
-        <!--browserName should be empty string when automating app-->
         <parameter name="browserName" value=""/>
         <parameter name="newCommandTimeout" value="120"/>
-
         <parameter name="parallel" value="false"/>
 		<classes>
 			<class name="com.seltaf.tests.AndroidAppTest" />
+		</classes>
+	</test>-->
+	<test name="HybridAppTest">
+	    <parameter name="browser" value="android" />
+	    <parameter name="testType" value="app" />
+        <parameter name="appiumServerURL" value="http://localhost:4723/wd/hub"/>
+        <parameter name="automationName" value="Appium"/>
+        <parameter name="platform" value="Android"/>
+        <parameter name="mobilePlatformVersion" value="5.1"/>
+        <parameter name="deviceName" value="BX903HYQWF"/>
+        <parameter name="appPackage" value="com.nagasagar.splitspends995349"/>
+        <parameter name="appActivity" value="com.nagasagar.splitspends995349.MainActivity"/>
+        <parameter name="browserName" value=""/>
+        <parameter name="newCommandTimeout" value="120"/>
+        <parameter name="parallel" value="false"/>
+		<classes>
+			<class name="com.seltaf.tests.AndroidHybridAppTest" />
 		</classes>
 	</test>
 </suite>

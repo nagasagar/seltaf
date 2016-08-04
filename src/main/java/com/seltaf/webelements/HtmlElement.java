@@ -312,8 +312,12 @@ public class HtmlElement {
         }
     
     public String toHTML() {
-        return getClass().getSimpleName().toLowerCase() +
+    	/*
+    	 return getClass().getSimpleName().toLowerCase() +
             " <a style=\"font-style:normal;color:#8C8984;text-decoration:none;\" href=# \">" +
+            getLabel() + ",: " + getBy().toString() + "</a>";
+    	 */
+        return " <a style=\"font-style:normal;color:#8C8984;text-decoration:none;\" href=# \">" +
             getLabel() + ",: " + getBy().toString() + "</a>";
     }
     
@@ -341,7 +345,7 @@ public class HtmlElement {
     }
     public void simulateClick() {
         findElement();
-
+        SeltafTestLogger.logWebStep(null, "Simulation click on " + toHTML(), false);
         String mouseOverScript =
             "if(document.createEvent){var evObj = document.createEvent('MouseEvents');evObj.initEvent('mouseover', true, false); arguments[0].dispatchEvent(evObj);} else if(document.createEventObject) { arguments[0].fireEvent('onmouseover');}";
         JavascriptExecutor js = (JavascriptExecutor) driver;

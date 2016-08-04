@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testdata>
+<Createempygrptestdata>
+     <testentitiy>
+        <TestMethod>Createempygrptestdata</TestMethod>
+       <TestcaseID>test0</TestcaseID>
+     </testentitiy>
+    <group>
+        <name>empty group</name>
+    </group>
+</Createempygrptestdata>
+<addNewGroup>
+    <dataset>
+        <testentitiy>
+            <TestMethod>addNewGroup</TestMethod>
+            <TestcaseID>test1</TestcaseID>
+            <TestTags>x,y</TestTags>
+        </testentitiy>
+        <group>
+	        <name>group1</name>
+	        <user>
+	            <name>Sagar</name>
+			</user>
+	        <user>
+				<name>user2</name>
+			</user>
+	    </group>
+    </dataset>
+	<dataset>
+	    <testentitiy>
+	        <TestMethod>addNewGroup</TestMethod>
+            <TestcaseID>test2</TestcaseID>
+            <TestTags>y</TestTags>
+        </testentitiy>
+	    <group>
+        	<name>group2</name>
+        	<user>
+            	<name>Sahas</name>
+			</user>
+        	<user>
+				<name>user4</name>
+			</user>
+        	<user>
+				<name>user5</name>
+			</user>
+    	</group>
+	</dataset>  
+</addNewGroup>
+</testdata>

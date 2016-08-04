@@ -104,16 +104,16 @@ public class SeltafTestLogger {
     public static String buildScreenshotLog(final ScreenShot screenShot) {
         StringBuffer sbMessage = new StringBuffer("");
         if (screenShot.getLocation() != null) {
-            sbMessage.append("<a href='" + screenShot.getLocation() + "' target=url>Application URL</a>");
+            sbMessage.append("<a href='" + screenShot.getLocation() + "' target=url>Application URL</a> | ");
         }
 
         if (screenShot.getHtmlSourcePath() != null) {
-            sbMessage.append(" | <a href='" + screenShot.getHtmlSourcePath()
-                    + "' target='_blank'>Application HTML Source</a>");
+            sbMessage.append(" <a href='" + screenShot.getHtmlSourcePath()
+                    + "' target='_blank'>Application HTML Source</a> | ");
         }
 
         if (screenShot.getImagePath() != null) {
-            sbMessage.append(" | <a href='" + screenShot.getImagePath()
+            sbMessage.append(" <a href='" + screenShot.getImagePath()
                     + "'data-featherlight='image'>Application Snapshot</a>");
         }
 

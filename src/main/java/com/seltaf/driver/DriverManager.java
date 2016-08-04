@@ -7,6 +7,7 @@ import java.util.Date;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 /*
@@ -32,6 +33,7 @@ import com.seltaf.webdriverfactory.ChromeDriverFactory;
 import com.seltaf.webdriverfactory.FirefoxDriverFactory;
 import com.seltaf.webdriverfactory.IEDriverFactory;
 import com.seltaf.webdriverfactory.IWebDriverFactory;
+import com.seltaf.webdriverfactory.RemoteDriverFactory;
 import com.seltaf.driver.CustomEventFiringWebDriver;
 import com.seltaf.core.SeltafContext;
 import com.seltaf.core.SeltafContextManager;
@@ -89,11 +91,7 @@ public class DriverManager
     }
     
     public WebDriver createRemoteWebDriver(final String browser, final String mode) throws Exception {
-        //WebDriver driver = null;
-        //webDriverBuilder = new ChromeDriverFactory(this.config);
-    	webDriverBuilder = new AndroidDriverFactory(this.config);
-
- /*
+      
         config.setBrowser(BrowserType.getBrowserType(browser));
         config.setMode(DriverMode.valueOf(mode));
 
@@ -106,13 +104,13 @@ public class DriverManager
                 webDriverBuilder = new IEDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.Chrome) {
                 webDriverBuilder = new ChromeDriverFactory(this.config);
-            } else if (config.getBrowser() == BrowserType.HtmlUnit) {
+            } /*else if (config.getBrowser() == BrowserType.HtmlUnit) {
                 webDriverBuilder = new HtmlUnitDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.Safari) {
                 webDriverBuilder = new SafariDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.SauceLabs) {
                 webDriverBuilder = new SauceLabsDriverFactory(this.config);
-            } else if (config.getBrowser() == BrowserType.Android) {
+            } */else if (config.getBrowser() == BrowserType.Android) {
                 webDriverBuilder = new AndroidDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.IPhone) {
 
@@ -131,7 +129,7 @@ public class DriverManager
             } else {
                 throw new RuntimeException("Unsupported browser" + browser);
             }
-        }*/
+        }
 
         synchronized (this.getClass()) {
             driver = webDriverBuilder.createWebDriver();

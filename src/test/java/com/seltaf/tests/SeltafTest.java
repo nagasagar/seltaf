@@ -4,7 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.seltaf.core.SeltafTestPlan;
-import com.seltaf.pageobjects.MercureTourLoginPage;
+import com.seltaf.pageobjects.MercureToursLoginPage;
 
 public class SeltafTest extends SeltafTestPlan {
 
@@ -13,11 +13,11 @@ public class SeltafTest extends SeltafTestPlan {
 
 		// Create Login Page object
 
-		MercureTourLoginPage Loginpage = new MercureTourLoginPage(true);
+		MercureToursLoginPage Loginpage = new MercureToursLoginPage(true);
 
 		// Verify login page title
 
-		String loginPageTitle = Loginpage.getPageTitle();
+		String loginPageTitle = Loginpage.getTitle();
 		
 		Assert.assertTrue(loginPageTitle.toLowerCase().contains("mercury"));
 	}
