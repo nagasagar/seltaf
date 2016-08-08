@@ -1,6 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
 
-<suite name="Suite1">
+<suite name="Suite1" parallel="tests"
+	verbose="1" thread-count="6">
     
     <listeners>
          <!--<listener class-name="com.seltaf.customlisteners.TestRetryListener" />-->
@@ -9,18 +10,35 @@
     
     <parameter name="appURL" value="http://newtours.demoaut.com/mercurywelcome.php"/>
     <parameter name="browser" value="chrome" />  <!--"*firefox, *chrome, *iexplore, *android"-->
-    <parameter name="runMode" value="LOCAL" />
+    <parameter name="runMode" value="ExistingGrid" />
+    <parameter name="webDriverGrid" value="http://localhost:4444/wd/hub" />
     <parameter name="useFirefoxDefaultProfile" value="false"/>
     <parameter name="softAssertEnabled" value="true" />
-    <parameter name="dpTagsInclude" value="x"/>
-	<!-- <test name="SeltafTest">
+    <!-- <parameter name="dpTagsInclude" value="x"/>-->
+   <test name="SeltafUnitTest">
+         <parameter name="testType" value="unit" />
 		<classes>
-			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
 			<class name="com.seltaf.tests.SoftAssertionTest" />
+		</classes>
+	</test>
+	 <test name="MercureTours Selenium Test">
+		<classes>
+			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />	
+		</classes>
+	</test>
+	<test name="MercureTours Features firefox">
+	    <parameter name="browser" value="firefox" />
+		<classes>
 			<class name="com.seltaf.tests.RunCukesTest" />
 		</classes>
 	</test>
-	<test name="AdnroidAppTest">
+	<test name="MercureTours Features">
+	    <parameter name="browser" value="chrome" />
+		<classes>
+			<class name="com.seltaf.tests.RunCukesTest" />
+		</classes>
+	</test>
+	<!--<test name="AdnroidAppTest">
 		<parameter name="browser" value="android" />
 	    <parameter name="testType" value="app" />
         <parameter name="appiumServerURL" value="http://localhost:4723/wd/hub"/>
@@ -36,8 +54,8 @@
 		<classes>
 			<class name="com.seltaf.tests.AndroidAppTest" />
 		</classes>
-	</test>-->
-	<test name="HybridAppTest">
+	</test>
+	 <test name="HybridAppTest">
 	    <parameter name="browser" value="android" />
 	    <parameter name="testType" value="app" />
         <parameter name="appiumServerURL" value="http://localhost:4723/wd/hub"/>
@@ -53,5 +71,5 @@
 		<classes>
 			<class name="com.seltaf.tests.AndroidHybridAppTest" />
 		</classes>
-	</test>
+	</test>-->
 </suite>

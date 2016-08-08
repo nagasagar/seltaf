@@ -20,6 +20,7 @@ import com.seltaf.helpers.WaitHelper;
 import com.seltaf.helpers.XmlObjectDataHelper;
 import com.seltaf.pageobjects.SplitSpendsAddGroupScreen;
 import com.seltaf.pageobjects.SplitSpendsAddUsersScreen;
+import com.seltaf.pageobjects.SplitSpendsGroupDetailsScreen;
 import com.seltaf.pageobjects.SplitSpendsListGroupsScreen;
 import com.seltaf.pageobjects.SplitSpendsListUsersScreen;
 import com.seltaf.pageobjects.SplitSpendsMenuScreen;
@@ -52,25 +53,35 @@ public class AndroidHybridAppTest extends SeltafTestPlan {
 	    }
     	
     @Test(groups = {"splitspends","hybridapp"},dataProvider = "GroupData", description = "Adds new group and adds users to it")
-    public void addNewGroup(TestEntity testentity,Group grp) throws Exception {
-    	System.out.println(testentity);
-    	System.out.println(grp);
-    	System.out.println("****");
+    public void CreateNewGroupandDelete(TestEntity testentity,Group grp) throws Exception {
     	SplitSpendsListGroupsScreen listGroupsScreen = new SplitSpendsListGroupsScreen(true,true);
     	listGroupsScreen.VerifyScreen();
     	SplitSpendsAddGroupScreen addgrpscreen = listGroupsScreen.clickOnAddNewGroupButton();
     	List<User> yet2baddedusers = addgrpscreen.Addgroup(grp);
     	if(yet2baddedusers.size()>0)
 		{
-    		//verify empty group created
+    		listGroupsScreen.verifygroupexistsBySearch(grp.getName());
     		SplitSpendsMenuScreen menu = listGroupsScreen.clickOnMenuButton();
     		SplitSpendsListUsersScreen listusersscreen = menu.NavigatetoListUsers();
     		SplitSpendsAddUsersScreen adduserscreen = listusersscreen.clickOnAddNewUserButton();
-    		adduserscreen.capturePageSnapshot();
-    		//verify group members
+    		for(User user : yet2baddedusers)
+    		{
+    			listusersscreen = adduserscreen.AddUser(user, grp);
+    			listusersscreen.verifyuserexists(user, grp);
+    			adduserscreen = listusersscreen.clickOnAddNewUserButton();
+    		}
+    		listusersscreen= adduserscreen.HideModal();
+    		menu = listusersscreen.clickOnMenuButton();
+    		menu.NavigatetoListGroups();
+    		listGroupsScreen = listGroupsScreen.verifygroupexistsBySearch(grp);
 		}
 		else{
-			// verifygroup
+			listGroupsScreen = listGroupsScreen.verifygroupexistsBySearch(grp);
 		}
+    	//Delete Created Group
+    	SplitSpendsGroupDetailsScreen grpdetailsscreen = listGroupsScreen.clickOnGroup(grp.getName());
+    	grpdetailsscreen.ClickEditGroupButton();
+    	listGroupsScreen= grpdetailsscreen.DeleteGroup();
+    	listGroupsScreen.verifygroupnotexistsBySearch(grp.getName());
     }
 }

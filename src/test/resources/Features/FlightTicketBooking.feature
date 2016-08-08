@@ -1,4 +1,4 @@
-Feature: Testing Mercury tours Flight ticket booking feature
+Feature: Testing Mercury tours Flight ticket booking feature - parameterized Data
 
   Background: 
     Given TestData is available for <testcaseid>

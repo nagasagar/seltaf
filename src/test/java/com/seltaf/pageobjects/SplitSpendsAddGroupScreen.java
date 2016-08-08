@@ -44,7 +44,7 @@ public class SplitSpendsAddGroupScreen extends SeltafPageObject  {
 			AddButton.submit();
 		}
 		else{
-			AddButton.click();
+			AddButton.submit();
 		}
 		return yet2baddedusers;
 		 

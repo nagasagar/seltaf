@@ -3,6 +3,8 @@ package com.seltaf.pageobjects;
 import org.openqa.selenium.By;
 
 import com.seltaf.core.SeltafPageObject;
+import com.seltaf.dataobjects.Group;
+import com.seltaf.dataobjects.User;
 import com.seltaf.webelements.ButtonElement;
 import com.seltaf.webelements.HtmlElement;
 import com.seltaf.webelements.LabelElement;
@@ -30,5 +32,10 @@ private static LabelElement identifier_element = new LabelElement("List Users He
 		AddNewUserButton.click();
 		 return new SplitSpendsAddUsersScreen();		 
 	 }
+
+	public SplitSpendsListUsersScreen verifyuserexists(User user, Group grp) {
+		return this;
+		
+	}
 
 }

@@ -354,14 +354,14 @@ public abstract class BasePage {
 
 	    public void waitForElementEditable(final HtmlElement element) {
 	        Assert.assertNotNull(element, "Element can't be null");
-	        SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to be editable.", false);
+	       // SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to be editable.", false);
 
 	        WebDriverWait wait = new WebDriverWait(driver, explictWaitTimeout);
 	        wait.until(ExpectedConditions.elementToBeClickable(element.getBy()));
 	    }
 
 	    public void waitForElementPresent(final By by) {
-	        SeltafTestLogger.logWebStep(null, "wait for " + by.toString() + " to be present.", false);
+	       // SeltafTestLogger.logWebStep(null, "wait for " + by.toString() + " to be present.", false);
 
 	        WebDriverWait wait = new WebDriverWait(driver, explictWaitTimeout);
 	        wait.until(ExpectedConditions.presenceOfElementLocated(by));
@@ -376,7 +376,7 @@ public abstract class BasePage {
 
 	    public void waitForElementPresent(final HtmlElement element) {
 	        Assert.assertNotNull(element, "Element can't be null");
-	        SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to be present.", false);
+	      //  SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to be present.", false);
 
 	        WebDriverWait wait = new WebDriverWait(driver, explictWaitTimeout);
 	        wait.until(ExpectedConditions.presenceOfElementLocated(element.getBy()));
@@ -384,7 +384,7 @@ public abstract class BasePage {
 
 	    public void waitForElementToBeVisible(final HtmlElement element) {
 	        Assert.assertNotNull(element, "Element can't be null");
-	        SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to be visible.", false);
+	      //  SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to be visible.", false);
 
 	        WebDriverWait wait = new WebDriverWait(driver, explictWaitTimeout);
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(element.getBy()));
@@ -392,7 +392,7 @@ public abstract class BasePage {
 
 	    public void waitForElementToDisappear(final HtmlElement element) {
 	        Assert.assertNotNull(element, "Element can't be null");
-	        SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to disappear.", false);
+	      //   SeltafTestLogger.logWebStep(null, "wait for " + element.toString() + " to disappear.", false);
 
 	        WebDriverWait wait = new WebDriverWait(driver, explictWaitTimeout);
 	        wait.until(ExpectedConditions.invisibilityOfElementLocated(element.getBy()));

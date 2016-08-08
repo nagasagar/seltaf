@@ -9,11 +9,11 @@
         <name>empty group</name>
     </group>
 </Createempygrptestdata>
-<addNewGroup>
+<CreateNewGroupandDelete>
     <dataset>
         <testentitiy>
-            <TestMethod>addNewGroup</TestMethod>
-            <TestcaseID>test1</TestcaseID>
+            <TestMethod>CreateNewGroupandDelete</TestMethod>
+            <TestcaseID>withexistingusers</TestcaseID>
             <TestTags>x,y</TestTags>
         </testentitiy>
         <group>
@@ -22,20 +22,20 @@
 	            <name>Sagar</name>
 			</user>
 	        <user>
-				<name>user2</name>
+				<name>Sahas</name>
 			</user>
 	    </group>
     </dataset>
 	<dataset>
 	    <testentitiy>
-	        <TestMethod>addNewGroup</TestMethod>
-            <TestcaseID>test2</TestcaseID>
+	        <TestMethod>CreateNewGroupandDelete</TestMethod>
+            <TestcaseID>withnewusers</TestcaseID>
             <TestTags>y</TestTags>
         </testentitiy>
 	    <group>
         	<name>group2</name>
         	<user>
-            	<name>Sahas</name>
+            	<name>user3</name>
 			</user>
         	<user>
 				<name>user4</name>
@@ -45,5 +45,5 @@
 			</user>
     	</group>
 	</dataset>  
-</addNewGroup>
+</CreateNewGroupandDelete>
 </testdata>

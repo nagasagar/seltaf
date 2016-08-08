@@ -20,7 +20,7 @@ public class Test_Steps {
         driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("http://www.store.demoqa.com");
-        assertEquals(true, false, " intentional assert failure");
+        
 		}
 
 	@When("^User Navigate to LogIn Page$")
@@ -28,12 +28,13 @@ public class Test_Steps {
 		driver.findElement(By.xpath(".//*[@id='account']/a")).click();
 		}
 
-	@When("^User enters UserName and Password$")
-	public void user_enters_UserName_and_Password() throws Throwable {
-		driver.findElement(By.id("log")).sendKeys("nagasagar"); 	 
-	    driver.findElement(By.id("pwd")).sendKeys("nagasahasdasa");
-	    driver.findElement(By.id("login")).click();
-		}
+	@When("^User enters \"(.*)\" and \"(.*)\"$")
+	public void user_enters_UserName_and_Password(String username, String password) throws Throwable {
+		driver.findElement(By.id("log")).sendKeys(username); 	 
+	    driver.findElement(By.id("pwd")).sendKeys(password);
+	    assertEquals("testuser_2", username, " intentional assert failure");
+	    //driver.findElement(By.id("login")).click();
+	}
 
 	@Then("^Message displayed Login Successfully$")
 	public void message_displayed_Login_Successfully() throws Throwable {
@@ -48,7 +49,9 @@ public class Test_Steps {
 	@Then("^Message displayed LogOut Successfully$")
 	public void message_displayed_LogOut_Successfully() throws Throwable {
 		System.out.println("LogOut Successfully");
+		driver.close();
 		driver.quit();
+		
 	}
 
 }

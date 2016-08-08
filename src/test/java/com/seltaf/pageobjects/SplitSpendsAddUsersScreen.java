@@ -22,6 +22,9 @@ public class SplitSpendsAddUsersScreen extends SeltafPageObject{
 	private static ButtonElement SelectGroupLabel = new ButtonElement("select groups button", By.xpath("//div[contains(@class,'active')]//form[@name='adduserform']//div[contains(@ng-click,'showselectgroups()')]"));
 	private static SelectList MultiSelectGroupssCheckboxList =  new SelectList("Select_users_List",By.xpath("//div[contains(@class,'modal-backdrop active')]//label[@ng-repeat='group in groups']"));
 	
+	private static ButtonElement SelectGroupsAcceptButton = new ButtonElement("Accept selected groups Button", By.xpath("//div[contains(@class,'modal-backdrop active')]//button[contains(@ng-click,'validateselectgroups()')]"));
+	private static ButtonElement SelectGroupsHideButton = new ButtonElement("HIde select groups Modal Button", By.xpath("//div[contains(@class,'modal-backdrop active')]//button[contains(@ng-click,'hideselectgroups()')]"));
+	
 	public SplitSpendsAddUsersScreen() throws Exception {
 	        super(identifier_element); 
 	}
@@ -36,7 +39,6 @@ public class SplitSpendsAddUsersScreen extends SeltafPageObject{
 	 {
 		user_name.sendKeys(user.getName());
 		selectgroup(group);
-		AddButton.click();
 		return click_adduserButton();
 		 
 	 }
@@ -58,14 +60,15 @@ public class SplitSpendsAddUsersScreen extends SeltafPageObject{
 		}
 		if(!groupexists)
 		{
+			SelectGroupsHideButton.click();
 			throw new Exception("input group doesnot exist");
 		}
-		
+		SelectGroupsAcceptButton.click();
 		
 	}
 
 	public SplitSpendsListUsersScreen click_adduserButton() throws Exception{
-		AddButton.click();
+		AddButton.submit();
 		return new SplitSpendsListUsersScreen();
 	}
 	

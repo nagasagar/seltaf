@@ -13,10 +13,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Reporter;
+import org.testng.SkipException;
 import org.testng.asserts.Assertion;
 
 import com.seltaf.core.Filter;
 import com.seltaf.core.SeltafContextManager;
+import com.seltaf.core.SeltafTestLogger;
+import com.seltaf.customexceptions.NoMatchingTestData;
 import com.seltaf.dataobjects.CreditCard;
 import com.seltaf.dataobjects.FlightSearchinput;
 import com.seltaf.dataobjects.Passenger;
@@ -34,6 +37,7 @@ import com.seltaf.webelements.ImageElement;
 import cucumber.api.DataTable;
 import cucumber.api.PendingException;
 import cucumber.api.Scenario;
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -64,6 +68,10 @@ public class Flight_ticket_booking_Steps {
         classMap.put("CreditCard", CreditCard.class);
 		 Iterator<Object[]> rdata = SpreadSheetHelper.getEntitiesFromSpreadsheet(
 	        		MercuryToursFlightBookingTest.class, classMap, "flightsearchinput.csv", filter);
+		 if(!rdata.hasNext())
+		 {
+			 throw new NoMatchingTestData("NO Matching Testdata available - examine your filters");
+		 }
 		 while (rdata.hasNext())
 		 {
 			 Object[] elements = rdata.next();
@@ -189,5 +197,11 @@ public class Flight_ticket_booking_Steps {
 	@Before
     public void beforeScenario(Scenario scenario){
  		SeltafContextManager.getThreadContext().clearcucumberVerificationFailures();
+ 		SeltafTestLogger.log("Started Scenario");
+    }
+	@After
+    public void afterScenario(Scenario scenario){
+ 		SeltafContextManager.getThreadContext().clearcucumberVerificationFailures();
+ 		SeltafTestLogger.log("Ended Scenario");
     }
 }

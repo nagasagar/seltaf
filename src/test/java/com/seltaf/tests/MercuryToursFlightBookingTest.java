@@ -24,9 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class MercuryToursFlightBookingTest extends SeltafTestPlan{
 	
 	@DataProvider(
-	        name = "FlightBookingData",
-	        parallel = true
-	    )
+	        name = "FlightBookingData"   )
 	    public static Iterator<Object[]> getData(final Method m)
 	        throws Exception {
 	        Filter filter = Filter.equalsIgnoreCase(TestEntity.TEST_METHOD,

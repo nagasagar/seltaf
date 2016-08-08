@@ -20,6 +20,7 @@ import org.testng.ITestListener;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.Reporter;
+import org.testng.SkipException;
 import org.testng.internal.ResultMap;
 import org.testng.internal.TestResult;
 import org.testng.internal.Utils;
@@ -28,13 +29,18 @@ import org.testng.xml.XmlSuite;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import com.seltaf.core.SeltafContextManager;
 import com.seltaf.core.SeltafTestLogger;
 import com.seltaf.core.TestRetryAnalyzer;
 import com.seltaf.core.ScreenShot;
 import com.seltaf.util.internal.entity.TestEntity;
 import com.seltaf.utils.ScreenshotUtility;
 import com.seltaf.driver.DriverManager;
+import com.seltaf.enums.TestType;
 import com.seltaf.core.CustomAssertion;
+import com.seltaf.customexceptions.NoMatchingTestData;
+
+import cucumber.api.testng.CucumberFeatureWrapper;
  
 public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITestListener{
     private ExtentReports extent;
@@ -86,10 +92,15 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
     					TestcaseId = x.getTestCaseId();
     				}
     			}
+    			String methodname = result.getMethod().getMethodName();
+    			if(methodname.equals("feature"))
+    			{
+    				methodname=((CucumberFeatureWrapper)testparameters[0]).toString();
+    			}
     			if(TestcaseId.equals(""))
-    				test = extent.startTest(result.getMethod().getMethodName());
+    				test = extent.startTest(methodname);
     			else
-    				test = extent.startTest(result.getMethod().getMethodName()+"  ("+TestcaseId+")");
+    				test = extent.startTest(methodname+"  ("+TestcaseId+")");
                 test.getTest().setStartedTime(getTime(result.getStartMillis()));
                 test.getTest().setEndedTime(getTime(result.getEndMillis()));
                 StringBuffer description = new StringBuffer("");
@@ -115,12 +126,37 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
                 for (String group : result.getMethod().getGroups())
                     test.assignCategory(group);
   
+                if(result.getAttribute("browser")!= null)
+                	test.assignCategory(result.getAttribute("browser").toString());
+                
+                ExtentTest scenario=null;
                 for(String message : Reporter.getOutput(result)) {
-                	if(message.contains("!!!FAILURE ALERT!!!"))
-                		test.log(LogStatus.FAIL, message);
+                	
+                	if(message.equals("Started Scenario"))
+                	{
+                		 scenario = extent.startTest("Scenario");
+                	}
+                	
+                	if(scenario==null){
+                		if(message.contains("!!!FAILURE ALERT!!!"))
+                    		test.log(LogStatus.FAIL, message);
+                    	else
+                    		test.log(LogStatus.INFO, message);
+                      }
                 	else
-                		test.log(LogStatus.INFO, message);
-                  }
+                	{
+                		if(message.contains("!!!FAILURE ALERT!!!"))
+                			scenario.log(LogStatus.FAIL, message);
+                    	else
+                    		scenario.log(LogStatus.INFO, message);
+                	}
+                	if(message.equals("Ended Scenario") && scenario!=null)
+                	{
+                		test.appendChild(scenario);
+                		 scenario =null;
+                	}
+                }
+                	
                                 
                 if (result.getThrowable() != null) {
                     test.log(status, result.getThrowable());
@@ -161,6 +197,12 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
 
 	        // Handle Soft CustomAssertion
 	        if (method.isTestMethod()) {
+	        	if(result.getStatus() == TestResult.FAILURE && result.getThrowable().getCause().getClass().equals(NoMatchingTestData.class)){
+	        		result.setStatus(TestResult.SKIP);
+	        	}
+	        	if(result.getStatus() == TestResult.FAILURE && result.getThrowable().getCause().getClass().equals(SkipException.class)){
+	        		result.setStatus(TestResult.SKIP);
+	        	}
 	            List<Throwable> verificationFailures = CustomAssertion.getVerificationFailures();
 
 	            int size = verificationFailures.size();
@@ -203,7 +245,9 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
 	}
 
 	public void onTestStart(ITestResult result) {
-		// TODO Auto-generated method stub
+		String Testtype = SeltafContextManager.getThreadContext().getTestType();
+		if (!Testtype.equalsIgnoreCase(TestType.UNIT.toString()) && !Testtype.equalsIgnoreCase(TestType.API.toString()))
+			result.setAttribute("browser", DriverManager.getDriverManager().getBrowser().replace("*", ""));
 		
 	}
 

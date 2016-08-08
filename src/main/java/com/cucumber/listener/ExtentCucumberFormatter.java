@@ -3,6 +3,7 @@ package com.cucumber.listener;
 import com.relevantcodes.extentreports.*;
 import com.seltaf.core.CustomAssertion;
 import com.seltaf.core.SeltafContextManager;
+import com.seltaf.customexceptions.NoMatchingTestData;
 
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.io.URLOutputStream;
@@ -16,6 +17,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.*;
 
+import org.testng.SkipException;
 import org.testng.internal.TestResult;
 import org.testng.internal.Utils;
 
@@ -111,8 +113,7 @@ public class ExtentCucumberFormatter implements Reporter, Formatter {
     }
 
     public static void initiateExtentCucumberFormatter() {
-        String reportFilePath = "output" + File.separator + "Run_" + System.currentTimeMillis() + File.separator +
-                "report.html";
+        String reportFilePath = "test-output" + File.separator + "CucumberFeaturesExecutionReport.html";
         initiateExtentCucumberFormatter(new File(reportFilePath));
     }
 
@@ -174,7 +175,18 @@ public class ExtentCucumberFormatter implements Reporter, Formatter {
     	            }
     	          SeltafContextManager.getThreadContext().clearcucumberVerificationFailures();
             } else if ("failed".equals(result.getStatus())) {
-                scenarioTest.log(LogStatus.FAIL, testSteps.poll().getName(), result.getError());
+            	if(result.getError().getClass().equals(NoMatchingTestData.class))
+            	{
+            		scenarioTest.log(LogStatus.SKIP, testSteps.poll().getName(), "SKIPPED - Test data Not available");
+            	}
+            	else if(result.getError().getClass().equals(NoMatchingTestData.class))
+            	{
+            		scenarioTest.log(LogStatus.SKIP, testSteps.poll().getName(), "SKIPPED");
+            	}
+            	else{
+            		scenarioTest.log(LogStatus.FAIL, testSteps.poll().getName(), result.getError());
+            	}
+                
             } else if ("skipped".equals(result.getStatus())) {
                 scenarioTest.log(LogStatus.SKIP, testSteps.poll().getName(), "SKIPPED");
             } else if ("undefined".equals(result.getStatus())) {
