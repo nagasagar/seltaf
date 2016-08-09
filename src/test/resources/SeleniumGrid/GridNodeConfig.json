@@ -43,7 +43,7 @@
     "port": 5555,
     "register": true,
     "registerCycle": 5000,
-    "hub":"http://192.168.1.103:4444/grid/register/"
+    "hub":"http://10.51.10.166:4444/grid/register/"
 
   }
 }

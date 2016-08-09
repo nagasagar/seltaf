@@ -15,10 +15,16 @@
     <parameter name="useFirefoxDefaultProfile" value="false"/>
     <parameter name="softAssertEnabled" value="true" />
     <!-- <parameter name="dpTagsInclude" value="x"/>-->
-   <test name="SeltafUnitTest">
+   <!--<test name="SeltafUnitTest">
          <parameter name="testType" value="unit" />
 		<classes>
 			<class name="com.seltaf.tests.SoftAssertionTest" />
+		</classes>
+	</test>
+	<test name="SeltafAPITest">
+         <parameter name="testType" value="api" />
+		<classes>
+			<class name="com.seltaf.tests.APITest" />
 		</classes>
 	</test>
 	 <test name="MercureTours Selenium Test">
@@ -38,7 +44,7 @@
 			<class name="com.seltaf.tests.RunCukesTest" />
 		</classes>
 	</test>
-	<!--<test name="AdnroidAppTest">
+	<test name="AdnroidAppTest">
 		<parameter name="browser" value="android" />
 	    <parameter name="testType" value="app" />
         <parameter name="appiumServerURL" value="http://localhost:4723/wd/hub"/>
@@ -72,4 +78,22 @@
 			<class name="com.seltaf.tests.AndroidHybridAppTest" />
 		</classes>
 	</test>-->
+	<test name="AndroidBrowserAPPTest">
+	    <parameter name="runMode" value="LOCAL" />
+	    <parameter name="browser" value="*android" />
+	    <parameter name="testType" value="Web" />
+        <parameter name="appiumServerURL" value="http://localhost:4723/wd/hub"/>
+        <parameter name="automationName" value="Appium"/>
+        <parameter name="platform" value="Android"/>
+        <parameter name="mobilePlatformVersion" value="5.1"/>
+        <parameter name="deviceName" value="BX903HYQWF"/>
+        <!-- <parameter name="app" value="Browser"/>-->
+        <parameter name="browserName" value="Chrome"/>
+        <parameter name="appPackage" value="com.android.chrome"/>
+        <parameter name="newCommandTimeout" value="120"/>
+        <parameter name="parallel" value="false"/>
+		<classes>
+			<class name="com.seltaf.tests.MercuryToursFlightBookingTest" />
+		</classes>
+	</test>
 </suite>

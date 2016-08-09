@@ -140,6 +140,8 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
                 	if(scenario==null){
                 		if(message.contains("!!!FAILURE ALERT!!!"))
                     		test.log(LogStatus.FAIL, message);
+                		else if(message.endsWith("- Passed."))
+                			test.log(LogStatus.PASS, message);
                     	else
                     		test.log(LogStatus.INFO, message);
                       }
@@ -147,6 +149,8 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
                 	{
                 		if(message.contains("!!!FAILURE ALERT!!!"))
                 			scenario.log(LogStatus.FAIL, message);
+                		else if(message.endsWith("- Passed."))
+                			test.log(LogStatus.PASS, message);
                     	else
                     		scenario.log(LogStatus.INFO, message);
                 	}
@@ -197,10 +201,10 @@ public class ExtentReporterNG implements IReporter, IInvokedMethodListener, ITes
 
 	        // Handle Soft CustomAssertion
 	        if (method.isTestMethod()) {
-	        	if(result.getStatus() == TestResult.FAILURE && result.getThrowable().getCause().getClass().equals(NoMatchingTestData.class)){
+	        	if(result.getStatus() == TestResult.FAILURE && result.getThrowable().getCause()!=null && result.getThrowable().getCause().getClass().equals(NoMatchingTestData.class)){
 	        		result.setStatus(TestResult.SKIP);
 	        	}
-	        	if(result.getStatus() == TestResult.FAILURE && result.getThrowable().getCause().getClass().equals(SkipException.class)){
+	        	if(result.getStatus() == TestResult.FAILURE && result.getThrowable().getCause()!=null && result.getThrowable().getCause().getClass().equals(SkipException.class)){
 	        		result.setStatus(TestResult.SKIP);
 	        	}
 	            List<Throwable> verificationFailures = CustomAssertion.getVerificationFailures();

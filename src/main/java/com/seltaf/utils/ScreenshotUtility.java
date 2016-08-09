@@ -197,12 +197,12 @@ public class ScreenshotUtility {
                 return null;
             }
 
-            if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType())) {
+            if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType()) && !SeltafContextManager.isWebTest()) {
             	String current_context = ((AppiumDriver) ((EventFiringWebDriver) driver).getWrappedDriver()).getContext();
-            	switchContext(driver,"NATIVE");
+            	//switchContext(driver,"NATIVE");
             	TakesScreenshot screenShot = (TakesScreenshot) driver;
             	String screenshotstring = screenShot.getScreenshotAs(OutputType.BASE64);
-                switchContext(driver,current_context);
+                //switchContext(driver,current_context);
                 return screenshotstring;
             }
 

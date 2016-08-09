@@ -6,6 +6,8 @@ import com.seltaf.core.SeltafPageObject;
 import com.seltaf.dataobjects.Address;
 import com.seltaf.dataobjects.CreditCard;
 import com.seltaf.dataobjects.Passenger;
+import com.seltaf.driver.DriverManager;
+import com.seltaf.enums.BrowserType;
 import com.seltaf.webelements.ButtonElement;
 import com.seltaf.webelements.ImageElement;
 import com.seltaf.webelements.SelectList;
@@ -95,7 +97,11 @@ public class FlightBookingPage extends SeltafPageObject {
 	 
 	 public BookingConfirmationPage proceed_2_book() throws Exception
 	 {
-		 SecureBuyButton.click();
+		 
+		 if (DriverManager.getDriverManager().getBrowser().equalsIgnoreCase(BrowserType.Android.getBrowserType()))
+			 SecureBuyButton.simulateClick();
+		 else
+			 SecureBuyButton.click();
 		 return new BookingConfirmationPage();
 	 }
 	

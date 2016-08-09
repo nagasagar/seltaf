@@ -203,6 +203,7 @@ public class CustomAssertion {
 
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -212,6 +213,7 @@ public class CustomAssertion {
 
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -220,6 +222,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final byte[] actual, final byte[] expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -229,6 +232,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final char actual, final char expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -237,6 +241,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final Collection actual, final Collection expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -245,6 +250,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final double actual, final double expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -253,6 +259,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final float actual, final float expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -261,6 +268,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final int actual, final int expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -269,7 +277,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final long actual, final long expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
-
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
 
             addVerificationFailure(e);
@@ -279,6 +287,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final Object actual, final Object expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -287,6 +296,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final Object[] actual, final Object[] expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -295,6 +305,7 @@ public class CustomAssertion {
     public static void softAssertEquals(final short actual, final short expected, final String message) {
         try {
             Assert.assertEquals(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -302,7 +313,8 @@ public class CustomAssertion {
 
     public static void softAssertEquals(final String actual, final String expected, final String message) {
         try {
-            Assert.assertEquals(actual, expected, message);
+            Assert.assertEquals(actual, expected, message +"--");
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -311,6 +323,7 @@ public class CustomAssertion {
     public static void softAssertFalse(final boolean condition, final String message) {
         try {
             Assert.assertFalse(condition, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -319,6 +332,7 @@ public class CustomAssertion {
     public static void softAssertNotNull(final Object object, final String message) {
         try {
             Assert.assertNotNull(object, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -327,6 +341,7 @@ public class CustomAssertion {
     public static void softAssertNotSame(final Object actual, final Object expected, final String message) {
         try {
             Assert.assertNotSame(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -335,6 +350,7 @@ public class CustomAssertion {
     public static void softAssertNull(final Object object, final String message) {
         try {
             Assert.assertNull(object, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -343,6 +359,7 @@ public class CustomAssertion {
     public static void softAssertSame(final Object actual, final Object expected, final String message) {
         try {
             Assert.assertSame(actual, expected, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }
@@ -351,6 +368,7 @@ public class CustomAssertion {
     public static void softAssertTrue(final boolean condition, final String message) {
         try {
             Assert.assertTrue(condition, message);
+            SeltafTestLogger.log(message + " - Passed.");
         } catch (Throwable e) {
             addVerificationFailure(e);
         }

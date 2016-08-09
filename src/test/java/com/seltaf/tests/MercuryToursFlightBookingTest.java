@@ -50,8 +50,7 @@ public class MercuryToursFlightBookingTest extends SeltafTestPlan{
 	        public void flightBookingTest(final TestEntity testEntity,
 	            final FlightSearchinput input, final Passenger passenger, final CreditCard creditcard) throws Exception {
 
-	    		if(passenger.getFirstName().equalsIgnoreCase("nagasagar")||passenger.getFirstName().equalsIgnoreCase("web"))
-	    			assertEquals(true, false, passenger.getFirstName()+" is a realuser");
+
 	            BookingConfirmationPage confirmationpage = new HomePage(true).navigateToLoginPage()
 	            .login2Website()
 	            .Searchflight(input)
