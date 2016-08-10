@@ -17,8 +17,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.*;
 
-import org.testng.SkipException;
-import org.testng.internal.TestResult;
 import org.testng.internal.Utils;
 
 /**

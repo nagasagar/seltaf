@@ -20,17 +20,12 @@ public class APITest extends SeltafTestPlan {
 	 */
 	@Test(groups = { "countries_api", "APITest" }, description = "Continues with test execution even though assertions fail")
 	public void getCapital_APITest() throws JSONException {
-		 PreemptiveBasicAuthScheme auth = new PreemptiveBasicAuthScheme();
-		    auth.setUserName("nds4kor");
-		    auth.setPassword("Sagar@12345");
+		
 
 		    
 		// make get request to fetch capital of norway
 		    Response resp = RestAssured
-		            .given()
-		            // tried with and without this 
-		            .header("Proxy-Authorization", auth.generateAuthToken()) 
-		            .proxy("rb-proxy-apac.bosch.com", 8080)
+		            
 		            .get("http://restcountries.eu/rest/v1/name/norway");
 		// Fetching response in JSON
 		    System.out.println(resp.asString());
