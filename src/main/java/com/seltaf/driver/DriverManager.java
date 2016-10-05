@@ -81,13 +81,13 @@ public class DriverManager
                 webDriverBuilder = new IEDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.Chrome) {
                 webDriverBuilder = new ChromeDriverFactory(this.config);
-            } /*else if (config.getBrowser() == BrowserType.HtmlUnit) {
+            } else if (config.getBrowser() == BrowserType.HtmlUnit) {
                 webDriverBuilder = new HtmlUnitDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.Safari) {
                 webDriverBuilder = new SafariDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.SauceLabs) {
                 webDriverBuilder = new SauceLabsDriverFactory(this.config);
-            } */else if (config.getBrowser() == BrowserType.Android) {
+            } else if (config.getBrowser() == BrowserType.Android) {
                 webDriverBuilder = new AndroidDriverFactory(this.config);
             } else if (config.getBrowser() == BrowserType.IPhone) {
 
