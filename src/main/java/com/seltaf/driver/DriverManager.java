@@ -9,23 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
-
-/*
-import com.seleniumtests.browserfactory.AndroidDriverFactory;
-import com.seleniumtests.browserfactory.ChromeDriverFactory;
-import com.seleniumtests.browserfactory.FirefoxDriverFactory;
-import com.seleniumtests.browserfactory.HtmlUnitDriverFactory;
-import com.seleniumtests.browserfactory.IEDriverFactory;
-import com.seleniumtests.browserfactory.RemoteDriverFactory;
-import com.seleniumtests.browserfactory.SafariDriverFactory;
-import com.seleniumtests.browserfactory.SauceLabsDriverFactory;
-import com.seleniumtests.driver.BrowserType;
-import com.seleniumtests.driver.DriverMode;
-import com.seleniumtests.core.SeltafContext;
-import com.seleniumtests.core.SeltafContextManager;
-import com.seleniumtests.driver.BrowserType;
-import com.seleniumtests.driver.DriverExceptionListener;
-import com.seleniumtests.driver.DriverMode;*/
 import com.seltaf.enums.BrowserType;
 import com.seltaf.enums.DriverMode;
 import com.seltaf.webdriverfactory.AndroidDriverFactory;
@@ -40,12 +23,6 @@ import com.seltaf.core.SeltafContextManager;
 import com.seltaf.customlisteners.DriverExceptionListener;
 import com.seltaf.driver.DriverConfig;
 
-
-
-/**
- * Hello world!
- *
- */
 public class DriverManager 
 {
 	private static ThreadLocal<WebDriver> driverSession = new ThreadLocal<WebDriver>();
